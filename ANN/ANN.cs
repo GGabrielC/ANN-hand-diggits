@@ -35,7 +35,7 @@ namespace ANN
         {
             setNetworkInput(data);
             setExpectedNetworkOutput(data);
-            setTopology(this.layerSizes);
+            setTopology();
             setWeights();
             setBiases();
             setActivationFunctions(ReLU);
@@ -55,13 +55,13 @@ namespace ANN
             int i = 0;
             foreach (var testCase in data)
             {
-                var expectedOutput = new Double[11, 1]; //TODO check all 0
-                expectedOutput[i, 0] = testCase.Label;
-                this.y[i++]=null;//= Matrix<Double>.Build.SparseOfArray(expectedOutput);
+                var expectedOutput = new Double[10, 1];
+                expectedOutput[testCase.Label, 0] = 1;
+                this.y[i++] = Matrix<Double>.Build.SparseOfArray(expectedOutput);
             }
         }
 
-        Double[,] asOneCollumn(byte[,] array)
+        Double[,] asOneCollumn(byte[,] array)   
         {
             var output = new Double[array.Length, 1];
             int i = 0;
@@ -70,28 +70,28 @@ namespace ANN
             return output;
         }
 
-        void setTopology( int[] layerSizes )
+        void setTopology()
         {
-            this.layersCount = 10;
+            this.layersCount = 5;
             this.layerSizes = new int[this.layersCount];
             this.layerSizes[0] = this.InputSize;
             this.layerSizes[this.layerSizes.Length - 1] = this.OutputSize;
             for (var i = 1; i < this.layersCount - 1; i++)
-                this.layerSizes[i] = 10;
+                this.layerSizes[i] = 5;
         }
         
         void setWeights()
         {
             w = new Matrix<Double>[this.layersCount];
-            for (var i = 0; i < this.layersCount; i++)
-                w[i] = Matrix<Double>.Build.Random(this.layerSizes[i], this.layersCount);
+            for (var i = 1; i < this.layersCount; i++)
+                w[i] = Matrix<Double>.Build.Random(this.layerSizes[i-1], this.layerSizes[i]);
         }
 
         void setBiases()
         {
             b = new Matrix<Double>[this.layersCount];
-            for (var i = 0; i < this.layersCount; i++)
-                b[i] = Matrix<Double>.Build.Random(this.layerSizes[i], this.layersCount); //TODO size
+            for (var i = 1; i < this.layersCount-1; i++)
+                b[i] = Matrix<Double>.Build.Random(this.layerSizes[i], 1);
         }
 
         void setActivationFunctions(Func<Double, Double> activationFunction)
