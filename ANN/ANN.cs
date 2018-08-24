@@ -12,13 +12,13 @@ namespace ANN
 {
     public class ANN
     {
-        Matrix<Double>[] x;
-        Matrix<Double>[] y;
+        Matrix<Double> x;
+        Matrix<Double> y;
 
-        int TestCasesCount { get => this.x.Count(); }
-        int InputSize { get => this.x[0].RowCount; }
-        int OutputSize { get => this.y[0].RowCount; }
-        
+        int TestCasesCount { get => this.x.RowCount; }
+        int TestCaseInputSize { get => this.x.ColumnCount; }
+        int LabelsCount { get => this.y.ColumnCount; }
+
         int layersCount;
         int[] layerSizes;
 
@@ -33,49 +33,43 @@ namespace ANN
 
         public ANN(IEnumerable<MNIST.IO.TestCase> data)
         {
-            setNetworkInput(data);
-            setExpectedNetworkOutput(data);
+            setNetworkInput(data, 28*28);
+            setExpectedNetworkOutput(data, 10);
             setTopology();
             setWeights();
             setBiases();
             setActivationFunctions(ReLU);
         }
 
-        void setNetworkInput(IEnumerable<MNIST.IO.TestCase> data)
+        void setNetworkInput(IEnumerable<MNIST.IO.TestCase> data, int testCaseSize)
         {
-            this.x = new Matrix<Double>[data.Count()];
+            var testCasesCount = data.Count();
+            var rawMatrix = new Double[testCasesCount, testCaseSize];
             int i = 0;
-            foreach (var testCase in data)
-                this.x[i++] = Matrix<Double>.Build.SparseOfArray(asOneCollumn(testCase.Image));
-        }
-
-        void setExpectedNetworkOutput(IEnumerable<MNIST.IO.TestCase> data)
-        {
-            this.y = new Matrix<Double>[data.Count()];
-            int i = 0;
-            foreach (var testCase in data)
-            {
-                var expectedOutput = new Double[10, 1];
-                expectedOutput[testCase.Label, 0] = 1;
-                this.y[i++] = Matrix<Double>.Build.SparseOfArray(expectedOutput);
+            foreach (var testCase in data) {
+                int j = 0;
+                foreach(var pixel in testCase.Image)
+                    rawMatrix[i,j++] = pixel;
+                i++;
             }
+            this.x = Matrix<Double>.Build.SparseOfArray(rawMatrix);
         }
 
-        Double[,] asOneCollumn(byte[,] array)   
+        void setExpectedNetworkOutput(IEnumerable<MNIST.IO.TestCase> data, int labelsCount)
         {
-            var output = new Double[array.Length, 1];
             int i = 0;
-            foreach(var el in array)
-                output[i++,0] = el;
-            return output;
+            var rawMatrix = new Double[this.TestCasesCount, labelsCount];
+            foreach (var testCase in data)
+                rawMatrix[i++, testCase.Label] = 1;
+            this.y = Matrix<Double>.Build.SparseOfArray(rawMatrix);
         }
 
         void setTopology()
         {
             this.layersCount = 5;
             this.layerSizes = new int[this.layersCount];
-            this.layerSizes[0] = this.InputSize;
-            this.layerSizes[this.layerSizes.Length - 1] = this.OutputSize;
+            this.layerSizes[0] = this.TestCaseInputSize;
+            this.layerSizes[this.layerSizes.Length - 1] = this.LabelsCount;
             for (var i = 1; i < this.layersCount - 1; i++)
                 this.layerSizes[i] = 5;
         }
@@ -89,19 +83,20 @@ namespace ANN
 
         void setBiases()
         {
+            // TODO
             b = new Matrix<Double>[this.layersCount];
             for (var i = 1; i < this.layersCount-1; i++)
                 b[i] = Matrix<Double>.Build.Random(this.layerSizes[i], 1);
         }
-
+        
         void setActivationFunctions(Func<Double, Double> activationFunction)
         {
-
+            // TODO
         }
 
         public void train()
         {
-
+            var a = x * w[1];
         }
 
     }
