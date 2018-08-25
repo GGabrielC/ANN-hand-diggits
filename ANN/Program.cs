@@ -16,7 +16,6 @@ namespace ANN
             String imagesPath = "C:/Users/Gabriel/source/repos/ConsoleApp1/ANN/t10k-images-idx3-ubyte.gz";
             var data = FileReaderMNIST.LoadImagesAndLables(labelsPath, imagesPath);
             var ann = new ANN(data);
-            ann.train();
 
             Console.ReadLine();
         }

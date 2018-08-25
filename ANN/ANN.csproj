@@ -106,7 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ANN.cs" />
-    <Compile Include="InputHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -117,6 +116,8 @@
     <None Include="t10k-labels-idx1-ubyte.gz" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivationFunctions.cs" />
+    <Compile Include="Layer.cs" />
     <Content Include="StarMath.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

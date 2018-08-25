@@ -12,6 +12,9 @@ namespace ANN
 {
     public class ANN
     {
+        const int DEFAULT_LAYER_COUNT = 5;
+        const int DEFAULT_LAYER_SIZE = 5;
+
         Matrix<Double> x;
         Matrix<Double> y;
 
@@ -19,32 +22,18 @@ namespace ANN
         int TestCaseInputSize { get => this.x.ColumnCount; }
         int LabelsCount { get => this.y.ColumnCount; }
 
-        int layersCount;
-        int[] layerSizes;
-
-        Matrix<Double>[] w;
-        Matrix<Double>[] b;
-        Func<Double, Double>[] a;
+        Layer[] layers;
         
-        public Double ReLU(Double x) //TODO move
-        {
-            return x < 0 ? 0 : x;
-        }
-
         public ANN(IEnumerable<MNIST.IO.TestCase> data)
         {
             setNetworkInput(data, 28*28);
             setExpectedNetworkOutput(data, 10);
-            setTopology();
-            setWeights();
-            setBiases();
-            setActivationFunctions(ReLU);
+            setLayers(DEFAULT_LAYER_COUNT, DEFAULT_LAYER_SIZE);
         }
 
         void setNetworkInput(IEnumerable<MNIST.IO.TestCase> data, int testCaseSize)
         {
-            var testCasesCount = data.Count();
-            var rawMatrix = new Double[testCasesCount, testCaseSize];
+            var rawMatrix = new Double[data.Count(), testCaseSize];
             int i = 0;
             foreach (var testCase in data) {
                 int j = 0;
@@ -57,47 +46,33 @@ namespace ANN
 
         void setExpectedNetworkOutput(IEnumerable<MNIST.IO.TestCase> data, int labelsCount)
         {
-            int i = 0;
             var rawMatrix = new Double[this.TestCasesCount, labelsCount];
+            int i = 0;
             foreach (var testCase in data)
                 rawMatrix[i++, testCase.Label] = 1;
             this.y = Matrix<Double>.Build.SparseOfArray(rawMatrix);
         }
 
-        void setTopology()
+        void setLayers(int layersCount, int layerSize)
         {
-            this.layersCount = 5;
-            this.layerSizes = new int[this.layersCount];
-            this.layerSizes[0] = this.TestCaseInputSize;
-            this.layerSizes[this.layerSizes.Length - 1] = this.LabelsCount;
-            for (var i = 1; i < this.layersCount - 1; i++)
-                this.layerSizes[i] = 5;
+            layers = new Layer[layersCount];
+            this.layers[0] = new Layer(this.TestCaseInputSize, null);
+            for (int i = 1; i < layers.Count()-1; i++)
+                this.layers[i] = new Layer(layerSize, layers[i-1]);
+            this.layers[layersCount - 1] = new Layer(this.LabelsCount, layers[layersCount-2]);
         }
         
-        void setWeights()
+        public Matrix<Double> feedForward(Matrix<Double> networkInput)
         {
-            w = new Matrix<Double>[this.layersCount];
-            for (var i = 1; i < this.layersCount; i++)
-                w[i] = Matrix<Double>.Build.Random(this.layerSizes[i-1], this.layerSizes[i]);
+            var networkOutput = networkInput;
+            foreach (var layer in layers)
+                networkOutput = layer.feed(networkOutput);
+            return networkOutput;
         }
 
-        void setBiases()
+        public void train(Matrix<Double> networkInput)
         {
-            // TODO
-            b = new Matrix<Double>[this.layersCount];
-            for (var i = 1; i < this.layersCount-1; i++)
-                b[i] = Matrix<Double>.Build.Random(this.layerSizes[i], 1);
+            var networkOutput = feedForward(networkInput);
         }
-        
-        void setActivationFunctions(Func<Double, Double> activationFunction)
-        {
-            // TODO
-        }
-
-        public void train()
-        {
-            var a = x * w[1];
-        }
-
     }
 }
