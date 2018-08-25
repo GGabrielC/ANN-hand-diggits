@@ -9,17 +9,17 @@ namespace ANN
 {
     public class Layer
     {
-		int size;
-		private Matrix<Double> w;
-		private Matrix<Double> b = null;
-		private Func<Double, Double>[] a = null;
-
 		public int Size{ get => size; }
 		public Matrix<double> W{ get => this.w; }
 		public Matrix<double> B{ get => this.b; }
 		public Func<double, double>[] A{ get => this.a; }
 
-		public Layer(int size, Layer previousLayer)
+        private int size;
+        private Matrix<Double> w;
+        private Matrix<Double> b = null;
+        private Func<Double, Double>[] a = null;
+
+        public Layer(int size, Layer previousLayer)
 		{
 			this.size = size;
 			setWeights(previousLayer.Size);
@@ -30,16 +30,17 @@ namespace ANN
 		public Matrix<Double> feed(Matrix<double> input)
 		{
 			var output = input * W;
+            // TODO
 			return output;
 		}
 
-		void setWeights(int prevLayerSize) =>
+        private void setWeights(int prevLayerSize) =>
 			this.w = Matrix<Double>.Build.Random(prevLayerSize, this.Size);
 
-		void setBiases() =>
+        private void setBiases() =>
 			this.b = Matrix<Double>.Build.Random(this.Size, 1);
 
-		void setActivationFunctions() =>
+        private void setActivationFunctions() =>
 			this.a = Enumerable.Repeat<Func<Double, Double>>(ActivationFunctions.ReLU, Size).ToArray();
     }
 }
