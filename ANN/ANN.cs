@@ -28,12 +28,6 @@ namespace ANN
             this.outputSize = outputSize;
             setLayers(DEFAULT_LAYER_COUNT, DEFAULT_LAYER_SIZE);
         }
-        
-        public void train(Matrix<Double> input, Matrix<Double> expectedOutput)
-        {
-            var networkOutput = feedForward(input);
-            // TODO
-        }
 
         public Matrix<Double> feedForward(Matrix<Double> networkInput)
         {
@@ -41,6 +35,20 @@ namespace ANN
             foreach (var layer in layers)
                 networkOutput = layer.feed(networkOutput);
             return networkOutput;
+        }
+
+        public void train(Matrix<Double> input, Matrix<Double> expectedOutput)
+        {
+            var networkOutput = feedForward(input);
+            var cost = getCost(input, networkOutput);
+            // TODO
+        }
+
+        Vector<Double> getCost(Matrix<Double> networkOutput, Matrix<Double> expectedOutput)
+        {
+            var errorMatrix = expectedOutput - networkOutput;
+            var squaredErrorMatrix = errorMatrix.PointwisePower(2);
+            return squaredErrorMatrix.ColumnSums().Divide(2);
         }
 
         void setLayers(int layersCount, int layerSize)
@@ -51,6 +59,7 @@ namespace ANN
                 this.layers[i] = new Layer(layerSize, layers[i-1]);
             this.layers[layersCount - 1] = new Layer(this.outputSize, layers[layersCount-2]);
         }
-        
+
+
     }
 }
