@@ -23,10 +23,10 @@ namespace ANN
             this.train( asInput(images), asOutput(labels) );
         }
         
-        public Matrix<Double> feedForward(String imagesPath)
+        public Matrix<Double> feed(String imagesPath)
         {
             var images = FileReaderMNIST.LoadImages(imagesPath);
-            return this.feedForward( asInput(images) );
+            return this.feed( asInput(images) );
         }
 
         private Matrix<Double> asInput(IEnumerable<byte[,]> images)
@@ -45,7 +45,6 @@ namespace ANN
 
         private Matrix<Double> asOutput(byte[] labels)
         {
-            var a = FileReaderMNIST.LoadLabel("");
             var rawMatrix = new Double[labels.Count(), this.OutputSize];
             int i = 0;
             foreach (var label in labels)

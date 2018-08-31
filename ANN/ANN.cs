@@ -14,13 +14,15 @@ namespace ANN
     {
         public int OutputSize { get => this.outputSize; }
         public int InputSize { get => this.inputSize; }
+        public int LayersCount { get => this.layers.Count(); }
+        public int getLayerSize(int layerIndex) => this.layers[layerIndex].Size;
 
         const int DEFAULT_LAYER_COUNT = 5;
         const int DEFAULT_LAYER_SIZE = 5;
         
         int inputSize;
         int outputSize;
-        Layer[] layers;
+        ANNLayer[] layers;
         
         public ANN(int inputSize, int outputSize)
         {
@@ -29,7 +31,7 @@ namespace ANN
             setLayers(DEFAULT_LAYER_COUNT, DEFAULT_LAYER_SIZE);
         }
 
-        public Matrix<Double> feedForward(Matrix<Double> networkInput)
+        public Matrix<Double> feed(Matrix<Double> networkInput)
         {
             var networkOutput = networkInput;
             foreach (var layer in layers)
@@ -37,29 +39,35 @@ namespace ANN
             return networkOutput;
         }
 
+        public Matrix<Double> feedTrain(Matrix<Double> networkInput)
+        {
+            var networkOutput = networkInput;
+            foreach (var layer in layers)
+                networkOutput = layer.feed(networkOutput);
+            return networkOutput;
+        }
+
+        public void backPropagation()
+        {
+            throw new NotImplementedException();
+        }
+
         public void train(Matrix<Double> input, Matrix<Double> expectedOutput)
         {
-            var networkOutput = feedForward(input);
-            var cost = getCost(input, networkOutput);
+            var costLayer = new CostLayer(expectedOutput);
+            var networkOutput = feedTrain(input);
+            backPropagation();
             // TODO
         }
-
-        Vector<Double> getCost(Matrix<Double> networkOutput, Matrix<Double> expectedOutput)
-        {
-            var errorMatrix = expectedOutput - networkOutput;
-            var squaredErrorMatrix = errorMatrix.PointwisePower(2);
-            return squaredErrorMatrix.ColumnSums().Divide(2);
-        }
-
+        
         void setLayers(int layersCount, int layerSize)
         {
-            layers = new Layer[layersCount];
-            this.layers[0] = new Layer(this.inputSize, null);
-            for (int i = 1; i < layers.Count()-1; i++)
-                this.layers[i] = new Layer(layerSize, layers[i-1]);
-            this.layers[layersCount - 1] = new Layer(this.outputSize, layers[layersCount-2]);
+            layers = new ANNLayer[layersCount];
+            int i = 0;
+            this.layers[i++] = new InputLayer(this.inputSize);
+            while( i < layers.Count()-1 )
+                this.layers[i++] = new Layer(layerSize, layers[i-1].Size);
+            this.layers[i++] = new Layer(this.outputSize, layers[i-1].Size);
         }
-
-
     }
 }

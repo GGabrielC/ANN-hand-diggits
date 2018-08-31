@@ -107,6 +107,9 @@
   <ItemGroup>
     <Compile Include="ANN.cs" />
     <Compile Include="ANN_MNIST.cs" />
+    <Compile Include="ANNLayer.cs" />
+    <Compile Include="CostLayer.cs" />
+    <Compile Include="InputLayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -120,6 +123,11 @@
     <Compile Include="ActivationFunctions.cs" />
     <Compile Include="Layer.cs" />
     <Content Include="StarMath.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ANN\Layer\" />
+    <Folder Include="ANN\Utils\" />
+    <Folder Include="Main\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

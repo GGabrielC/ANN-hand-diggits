@@ -7,40 +7,43 @@ using System.Threading.Tasks;
 
 namespace ANN
 {
-    public class Layer
+    public class Layer: ANNLayer
     {
-		public int Size{ get => size; }
+		public override int Size{ get => this.w.ColumnCount; }
 		public Matrix<double> W{ get => this.w; }
 		public Matrix<double> B{ get => this.b; }
 		public Func<double, double>[] A{ get => this.a; }
-
-        private int size;
-        private Matrix<Double> w;
+        
+        private Matrix<Double> w = null;
         private Matrix<Double> b = null;
         private Func<Double, Double>[] a = null;
 
-        public Layer(int size, Layer previousLayer)
+        public Layer(int size, int previousLayerSize) // set when needed ?
 		{
-			this.size = size;
-			setWeights(previousLayer.Size);
-			setBiases();
-			setActivationFunctions();
+			setWeights(size, previousLayerSize);
+			setBiases(size);
+			setActivationFunctions(size);
 		}
 
-		public Matrix<Double> feed(Matrix<double> input)
+		public override Matrix<Double> feed(Matrix<double> input)
 		{
 			var output = input * W;
             // TODO
 			return output;
 		}
 
-        private void setWeights(int prevLayerSize) =>
-			this.w = Matrix<Double>.Build.Random(prevLayerSize, this.Size);
+        public override Matrix<double> feedForTrain(Matrix<double> input)
+        {
+            throw new NotImplementedException();
+        }
 
-        private void setBiases() =>
-			this.b = Matrix<Double>.Build.Random(this.Size, 1);
+        private void setWeights(int size, int prevLayerSize) 
+            => this.w = Matrix<Double>.Build.Random(prevLayerSize, size);
 
-        private void setActivationFunctions() =>
-			this.a = Enumerable.Repeat<Func<Double, Double>>(ActivationFunctions.ReLU, Size).ToArray();
+        private void setBiases(int size) 
+            => this.b = Matrix<Double>.Build.Random(size, 1);
+
+        private void setActivationFunctions(int size) 
+            => this.a = Enumerable.Repeat<Func<Double, Double>>(ActivationFunctions.ReLU, size).ToArray()
     }
 }
