@@ -11,14 +11,14 @@ namespace ANN
     {
         public override int Size { get => size; }
         int size;
-        
+
         public InputLayer(int size)
             => this.size = size;
 
-        public override Matrix<double> feed(Matrix<double> input) 
+        public override Matrix<double> feed(Matrix<double> input)
             => input;
 
-        public override Matrix<double> feedForTrain(Matrix<double> input)
-            => input;
+        public override void feedForTrain(Matrix<double> input)
+        { }
     }
 }

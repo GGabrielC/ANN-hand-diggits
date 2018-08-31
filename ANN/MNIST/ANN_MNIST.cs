@@ -26,7 +26,7 @@ namespace ANN
         public Matrix<Double> feed(String imagesPath)
         {
             var images = FileReaderMNIST.LoadImages(imagesPath);
-            return this.feed( asInput(images) );
+            return this.Feed( asInput(images) );
         }
 
         private Matrix<Double> asInput(IEnumerable<byte[,]> images)

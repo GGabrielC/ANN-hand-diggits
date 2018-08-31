@@ -12,11 +12,14 @@ namespace ANN
 		public override int Size{ get => this.w.ColumnCount; }
 		public Matrix<double> W{ get => this.w; }
 		public Matrix<double> B{ get => this.b; }
-		public Func<double, double>[] A{ get => this.a; }
+		//public Func<double, double>[] Activations{ get => this.activations; }
         
         private Matrix<Double> w = null;
         private Matrix<Double> b = null;
-        private Func<Double, Double>[] a = null;
+        private Func<Double, Double>[] activations = null;
+
+        private Matrix<Double> z;
+        private Matrix<Double> a;
 
         public Layer(int size, int previousLayerSize) // set when needed ?
 		{
@@ -27,14 +30,15 @@ namespace ANN
 
 		public override Matrix<Double> feed(Matrix<double> input)
 		{
-			var output = input * W;
+			var output = input * this.W;
             // TODO
 			return output;
 		}
 
-        public override Matrix<double> feedForTrain(Matrix<double> input)
+        public override void feedForTrain(Matrix<double> input)
         {
-            throw new NotImplementedException();
+            this.z = input * this.W;
+            // TODO
         }
 
         private void setWeights(int size, int prevLayerSize) 
@@ -44,6 +48,6 @@ namespace ANN
             => this.b = Matrix<Double>.Build.Random(size, 1);
 
         private void setActivationFunctions(int size)
-            => this.a = Enumerable.Repeat<Func<Double, Double>>(ActivationFunctions.ReLU, size).ToArray();
+            => this.activations = Enumerable.Repeat<Func<Double, Double>>(ActivationFunctions.ReLU, size).ToArray();
     }
 }

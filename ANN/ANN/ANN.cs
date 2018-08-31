@@ -31,7 +31,7 @@ namespace ANN
             setLayers(DEFAULT_LAYER_COUNT, DEFAULT_LAYER_SIZE);
         }
 
-        public Matrix<Double> feed(Matrix<Double> networkInput)
+        public Matrix<Double> Feed(Matrix<Double> networkInput)
         {
             var networkOutput = networkInput;
             foreach (var layer in layers)
@@ -39,12 +39,10 @@ namespace ANN
             return networkOutput;
         }
 
-        public Matrix<Double> feedTrain(Matrix<Double> networkInput)
+        public void feedForTrain(Matrix<Double> networkInput)
         {
             var networkOutput = networkInput;
-            foreach (var layer in layers)
-                networkOutput = layer.feed(networkOutput);
-            return networkOutput;
+            layers.First().feedForTrain(networkOutput);
         }
 
         public void backPropagation()
@@ -55,7 +53,8 @@ namespace ANN
         public void train(Matrix<Double> input, Matrix<Double> expectedOutput)
         {
             var costLayer = new CostLayer(expectedOutput);
-            var networkOutput = feedTrain(input);
+            feedForTrain(input);
+
             backPropagation();
             // TODO
         }

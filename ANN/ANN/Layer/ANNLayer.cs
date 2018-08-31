@@ -11,7 +11,7 @@ namespace ANN
     {
         public abstract int Size { get; }
         public abstract Matrix<Double> feed(Matrix<double> input);
-        public abstract Matrix<Double> feedForTrain(Matrix<double> input);
+        public abstract void feedForTrain(Matrix<double> input);
         
     }
 }

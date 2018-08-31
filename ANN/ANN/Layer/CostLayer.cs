@@ -18,7 +18,7 @@ namespace ANN
         public override Matrix<double> feed(Matrix<double> networkOutput) =>
             CostFunctions.squaredEuclidianDistance(networkOutput, expectedOutput);
 
-        public override Matrix<double> feedForTrain(Matrix<double> input)
+        public override void feedForTrain(Matrix<double> input)
         {
             throw new NotImplementedException();
         }
