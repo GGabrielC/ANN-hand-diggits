@@ -69,5 +69,7 @@ namespace ANN
                 this.layers[i++] = new Layer(layerSize, layers[i-1].Size);
             this.layers[i++] = new Layer(this.outputSize, layers[i-1].Size);
         }
+
+
     }
 }

@@ -20,6 +20,5 @@ namespace ANN
 
         public override Matrix<double> feedForTrain(Matrix<double> input)
             => input;
-        }
     }
 }

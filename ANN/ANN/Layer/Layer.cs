@@ -43,7 +43,7 @@ namespace ANN
         private void setBiases(int size) 
             => this.b = Matrix<Double>.Build.Random(size, 1);
 
-        private void setActivationFunctions(int size) 
-            => this.a = Enumerable.Repeat<Func<Double, Double>>(ActivationFunctions.ReLU, size).ToArray()
+        private void setActivationFunctions(int size)
+            => this.a = Enumerable.Repeat<Func<Double, Double>>(ActivationFunctions.ReLU, size).ToArray();
     }
 }

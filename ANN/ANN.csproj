@@ -105,29 +105,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANN.cs" />
-    <Compile Include="ANN_MNIST.cs" />
-    <Compile Include="ANNLayer.cs" />
-    <Compile Include="CostLayer.cs" />
-    <Compile Include="InputLayer.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ANN\ANN.cs" />
+    <Compile Include="MNIST\ANN_MNIST.cs" />
+    <Compile Include="ANN\Layer\ANNLayer.cs" />
+    <Compile Include="ANN\Utils\CostFunctions.cs" />
+    <Compile Include="ANN\Layer\CostLayer.cs" />
+    <Compile Include="ANN\Layer\InputLayer.cs" />
+    <Compile Include="Main\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="t10k-images-idx3-ubyte.gz" />
-    <None Include="t10k-labels-idx1-ubyte.gz" />
+    <None Include="MNIST\MNIST Input Files\t10k-images-idx3-ubyte.gz" />
+    <None Include="MNIST\MNIST Input Files\t10k-labels-idx1-ubyte.gz" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivationFunctions.cs" />
-    <Compile Include="Layer.cs" />
+    <Compile Include="ANN\Utils\ActivationFunctions.cs" />
+    <Compile Include="ANN\Layer\Layer.cs" />
     <Content Include="StarMath.XML" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ANN\Layer\" />
-    <Folder Include="ANN\Utils\" />
-    <Folder Include="Main\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

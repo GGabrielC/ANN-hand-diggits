@@ -9,8 +9,6 @@ namespace ANN
     public class ActivationFunctions
     {
 		public static Double ReLU(Double x)
-		{
-			return x < 0 ? 0 : x;
-		}
+		    => x < 0 ? 0 : x;
     }
 }
