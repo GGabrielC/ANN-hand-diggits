@@ -105,8 +105,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANN\ANN.cs" />
-    <Compile Include="MNIST\ANN_MNIST.cs" />
+    <Compile Include="ANN\ArtificialNN.cs" />
+    <Compile Include="ANN\ExtensionMethods\ExtensionMethodsMatrix.cs" />
+    <Compile Include="MNIST_solver\ANN_MNIST.cs" />
     <Compile Include="ANN\Layer\ANNLayer.cs" />
     <Compile Include="ANN\Utils\CostFunctions.cs" />
     <Compile Include="ANN\Layer\CostLayer.cs" />
@@ -117,8 +118,8 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="MNIST\MNIST Input Files\t10k-images-idx3-ubyte.gz" />
-    <None Include="MNIST\MNIST Input Files\t10k-labels-idx1-ubyte.gz" />
+    <None Include="MNIST_solver\MNIST Input Files\t10k-images-idx3-ubyte.gz" />
+    <None Include="MNIST_solver\MNIST Input Files\t10k-labels-idx1-ubyte.gz" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ANN\Utils\ActivationFunctions.cs" />

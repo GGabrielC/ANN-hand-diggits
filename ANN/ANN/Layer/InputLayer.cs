@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace ANN
+namespace Layers
 {
     public class InputLayer : ANNLayer
     {
         public override int Size { get => size; }
         int size;
+        Matrix<Double> input;
 
         public InputLayer(int size)
             => this.size = size;
@@ -19,6 +20,6 @@ namespace ANN
             => input;
 
         public override void feedForTrain(Matrix<double> input)
-        { }
+            => this.input = input;
     }
 }

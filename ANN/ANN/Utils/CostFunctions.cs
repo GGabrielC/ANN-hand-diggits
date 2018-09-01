@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ANN
+namespace Utils
 {
     public class CostFunctions
     {

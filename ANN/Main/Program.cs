@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 using MNIST.IO;
+using Utils;
 
-namespace ANN
+namespace MAIN
 {
     class Program
     {
@@ -37,13 +38,13 @@ namespace ANN
             for (var i = 0; i < 3; i++)
                 for (var j = 0; j < 3; j++)
                     arr[i, j] = (j + 1) * (i + 1);
-            var a = 2 * Matrix<double>.Build.SparseOfArray(arr);
+            var a = 2 * Matrix<double>.Build.DenseOfArray(arr);
 
 
             for (var i = 0; i < 3; i++)
                 for (var j = 0; j < 3; j++)
                     arr[i, j] = (j + 1) * (i + 1);
-            var b = Matrix<double>.Build.SparseOfArray(arr);
+            var b = Matrix<double>.Build.DenseOfArray(arr);
 
             var c = CostFunctions.squaredEuclidianDistance(a, b);
 

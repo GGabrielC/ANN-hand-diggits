@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using System.Linq;
+using Layers;
 
 namespace ANN
 {
-    public class ANN
+    public class ArtificalNN
     {
         public int OutputSize { get => this.outputSize; }
         public int InputSize { get => this.inputSize; }
@@ -24,7 +25,7 @@ namespace ANN
         int outputSize;
         ANNLayer[] layers;
         
-        public ANN(int inputSize, int outputSize)
+        public ArtificalNN(int inputSize, int outputSize)
         {
             this.inputSize = inputSize;
             this.outputSize = outputSize;
@@ -68,7 +69,5 @@ namespace ANN
                 this.layers[i++] = new Layer(layerSize, layers[i-1].Size);
             this.layers[i++] = new Layer(this.outputSize, layers[i-1].Size);
         }
-
-
     }
 }

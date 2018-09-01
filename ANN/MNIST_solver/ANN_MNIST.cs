@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ANN;
 
-namespace ANN
+namespace MNIST
 {
-    class ANN_MNIST : ANN
+    class ANN_MNIST : ArtificalNN
     {
         const int IMAGE_WIDTH = 28;
         const int IMAGE_HEIGHT = 28;
@@ -40,7 +41,7 @@ namespace ANN
                     rawMatrix[i, j++] = pixel;
                 i++;
             }
-            return Matrix<Double>.Build.SparseOfArray(rawMatrix);
+            return Matrix<Double>.Build.DenseOfArray(rawMatrix);
         }
 
         private Matrix<Double> asOutput(byte[] labels)
@@ -49,10 +50,10 @@ namespace ANN
             int i = 0;
             foreach (var label in labels)
                 rawMatrix[i++, label] = 1;
-            return Matrix<Double>.Build.SparseOfArray(rawMatrix);
+            return Matrix<Double>.Build.DenseOfArray(rawMatrix);
         }
 
-        private Matrix<Double> asInput(IEnumerable<MNIST.IO.TestCase> data)
+        private Matrix<Double> AsInput(IEnumerable<MNIST.IO.TestCase> data)
         {
             var rawMatrix = new Double[data.Count(), this.InputSize];
             int i = 0;
@@ -63,7 +64,7 @@ namespace ANN
                     rawMatrix[i, j++] = pixel;
                 i++;
             }
-            return Matrix<Double>.Build.SparseOfArray(rawMatrix);
+            return Matrix<Double>.Build.DenseOfArray(rawMatrix);
         }
         
         private Matrix<Double> asOutput(IEnumerable<MNIST.IO.TestCase> data)
@@ -72,7 +73,7 @@ namespace ANN
             int i = 0;
             foreach (var testCase in data)
                 rawMatrix[i++, testCase.Label] = 1;
-            return Matrix<Double>.Build.SparseOfArray(rawMatrix);
+            return Matrix<Double>.Build.DenseOfArray(rawMatrix);
         }
     }
 }
