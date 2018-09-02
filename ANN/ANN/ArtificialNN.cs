@@ -8,6 +8,7 @@ using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using System.Linq;
 using Layers;
+using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
 namespace ANN
 {
@@ -32,7 +33,7 @@ namespace ANN
             setLayers(DEFAULT_LAYER_COUNT, DEFAULT_LAYER_SIZE);
         }
 
-        public Matrix<Double> Feed(Matrix<Double> networkInput)
+        public MatrixD Feed(MatrixD networkInput)
         {
             var networkOutput = networkInput;
             foreach (var layer in layers)
@@ -40,7 +41,7 @@ namespace ANN
             return networkOutput;
         }
 
-        public void feedForTrain(Matrix<Double> networkInput)
+        public void feedForTrain(MatrixD networkInput)
         {
             var networkOutput = networkInput;
             layers.First().feedForTrain(networkOutput);
@@ -51,7 +52,7 @@ namespace ANN
             throw new NotImplementedException();
         }
 
-        public void train(Matrix<Double> input, Matrix<Double> expectedOutput)
+        public void train(MatrixD input, MatrixD expectedOutput)
         {
             var costLayer = new CostLayer(expectedOutput);
             feedForTrain(input);

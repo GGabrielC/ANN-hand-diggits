@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
+using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
 namespace Layers
 {
@@ -11,15 +12,18 @@ namespace Layers
     {
         public override int Size { get => size; }
         int size;
-        Matrix<Double> input;
+        MatrixD input;
 
         public InputLayer(int size)
             => this.size = size;
 
-        public override Matrix<double> feed(Matrix<double> input)
+        public override MatrixD feed(MatrixD input)
             => input;
 
-        public override void feedForTrain(Matrix<double> input)
+        public override void feedForTrain(MatrixD input)
             => this.input = input;
+
+        public override void backPropagate(MatrixD partialDerivate)
+        { }
     }
 }

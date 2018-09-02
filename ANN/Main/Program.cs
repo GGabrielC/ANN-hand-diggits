@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 using MNIST.IO;
 using Utils;
+using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
 namespace MAIN
 {
@@ -38,13 +39,13 @@ namespace MAIN
             for (var i = 0; i < 3; i++)
                 for (var j = 0; j < 3; j++)
                     arr[i, j] = (j + 1) * (i + 1);
-            var a = 2 * Matrix<double>.Build.DenseOfArray(arr);
+            var a = 2 * MatrixD.Build.DenseOfArray(arr);
 
 
             for (var i = 0; i < 3; i++)
                 for (var j = 0; j < 3; j++)
                     arr[i, j] = (j + 1) * (i + 1);
-            var b = Matrix<double>.Build.DenseOfArray(arr);
+            var b = MatrixD.Build.DenseOfArray(arr);
 
             var c = CostFunctions.squaredEuclidianDistance(a, b);
 
