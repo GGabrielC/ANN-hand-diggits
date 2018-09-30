@@ -12,6 +12,9 @@ namespace Utils
         public static FuncDD getDerivate(FuncDD function)
             => derivates[function];
 
+        public static List<FuncDD> getDerivates(List<FuncDD> functions)
+            => functions.Select( function => getDerivate(function) ).ToList<FuncDD>() ;
+
         public static Double ReLU(Double x)
 		    => x < 0 ? 0 : x;
 

@@ -29,3 +29,4 @@ C:\Users\Gabriel\source\repos\ConsoleApp1\ANN\obj\Debug\ANN_MNIST.csproj.CoreCom
 C:\Users\Gabriel\source\repos\ConsoleApp1\ANN\obj\Debug\ANN_MNIST.csproj.CopyComplete
 C:\Users\Gabriel\source\repos\ConsoleApp1\ANN\obj\Debug\ANN.exe
 C:\Users\Gabriel\source\repos\ConsoleApp1\ANN\obj\Debug\ANN.pdb
+C:\Users\Gabriel\source\repos\ConsoleApp1\ANN\bin\Debug\CloneExtensions.dll

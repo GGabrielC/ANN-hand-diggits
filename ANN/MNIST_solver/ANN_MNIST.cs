@@ -8,32 +8,35 @@ using System.Threading.Tasks;
 using ANN;
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
-namespace MNIST
+namespace MNIST_SOLVER
 {
-    class ANN_MNIST : ArtificalNN
+    public class ANN_MNIST : ArtificalNN
     {
-        const int IMAGE_WIDTH = 28;
-        const int IMAGE_HEIGHT = 28;
-        const int COUNT_POSSIBLE_LABELS = 10;
+        public static readonly int IMAGE_WIDTH = 28;
+        public static readonly int IMAGE_HEIGHT = 28;
+        public static readonly int COUNT_POSSIBLE_LABELS = 10;
+        public static readonly int ANN_INPUT_SIZE = IMAGE_WIDTH * IMAGE_HEIGHT;
+        public static readonly int ANN_OUTPUT_SIZE = COUNT_POSSIBLE_LABELS;
 
-        public ANN_MNIST() : base(IMAGE_WIDTH * IMAGE_HEIGHT, COUNT_POSSIBLE_LABELS) { }
-        
+        public ANN_MNIST() : base(ANN_INPUT_SIZE, ANN_OUTPUT_SIZE) { }
+
         public void train(String labelsPath, String imagesPath)
         {
             var images = FileReaderMNIST.LoadImages(labelsPath);
             var labels = FileReaderMNIST.LoadLabel(labelsPath);
-            this.train( asInput(images), asOutput(labels) );
+            base.train( asInput(images), asOutput(labels) );
         }
         
         public MatrixD feed(String imagesPath)
         {
             var images = FileReaderMNIST.LoadImages(imagesPath);
-            return this.Feed( asInput(images) );
+            return base.feed( asInput(images) );
         }
 
+        
         private MatrixD asInput(IEnumerable<byte[,]> images)
         {
-            var rawMatrix = new Double[images.Count(), this.InputSize];
+            var rawMatrix = new Double[images.Count(), ANN_INPUT_SIZE];
             int i = 0;
             foreach (var image in images)
             {
@@ -47,7 +50,7 @@ namespace MNIST
 
         private MatrixD asOutput(byte[] labels)
         {
-            var rawMatrix = new Double[labels.Count(), this.OutputSize];
+            var rawMatrix = new Double[labels.Count(), ANN_OUTPUT_SIZE];
             int i = 0;
             foreach (var label in labels)
                 rawMatrix[i++, label] = 1;
@@ -56,7 +59,7 @@ namespace MNIST
 
         private MatrixD AsInput(IEnumerable<MNIST.IO.TestCase> data)
         {
-            var rawMatrix = new Double[data.Count(), this.InputSize];
+            var rawMatrix = new Double[data.Count(), ANN_INPUT_SIZE];
             int i = 0;
             foreach (var testCase in data)
             {
@@ -67,10 +70,10 @@ namespace MNIST
             }
             return MatrixD.Build.DenseOfArray(rawMatrix);
         }
-        
+
         private MatrixD asOutput(IEnumerable<MNIST.IO.TestCase> data)
         {
-            var rawMatrix = new Double[data.Count(), this.OutputSize];
+            var rawMatrix = new Double[data.Count(), ANN_OUTPUT_SIZE];
             int i = 0;
             foreach (var testCase in data)
                 rawMatrix[i++, testCase.Label] = 1;

@@ -20,7 +20,7 @@ namespace ExtensionMethods
             return m;
         }
 
-        public static MatrixD applyEachLine(this MatrixD matrix, FuncDD[] func)
+        public static MatrixD applyEachLine(this MatrixD matrix, List<FuncDD> func)
         {
             var m = MatrixD.Build.DenseOfMatrix(matrix);
             for (int i = 0; i < m.RowCount; i++)

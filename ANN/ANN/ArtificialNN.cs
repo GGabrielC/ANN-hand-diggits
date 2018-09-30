@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
-using System.Linq;
 using Layers;
+using CloneExtensions;
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
+using SysColGen = System.Collections.Generic;
+using ExtensionMethods;
 
 namespace ANN
 {
@@ -16,16 +18,19 @@ namespace ANN
     {
         public int OutputSize { get => this.outputSize; }
         public int InputSize { get => this.inputSize; }
-        public int LayersCount { get => this.layers.Count(); }
-        public int getLayerSize(int layerIndex) => this.layers[layerIndex].Size;
-
-        const int DEFAULT_LAYER_COUNT = 5;
-        const int DEFAULT_LAYER_SIZE = 5;
+        public int LayersCount { get => this.hiddenLayers.Count(); }
         
+        public const int DEFAULT_LAYER_COUNT = 5;
+        public const int DEFAULT_LAYER_SIZE = 5;
+
+        ANNLayer InputLayer { get => this.hiddenLayers.First.Value; }
+        ANNLayer OutputLayer { get => this.hiddenLayers.Last.Value; }
+        public LinkedList<ANNLayer> LayersShallowCopy { get => this.hiddenLayers.ShallowCopy(); }
+
+        LinkedList<ANNLayer> hiddenLayers = null;
         int inputSize;
         int outputSize;
-        ANNLayer[] layers;
-        
+
         public ArtificalNN(int inputSize, int outputSize)
         {
             this.inputSize = inputSize;
@@ -33,42 +38,21 @@ namespace ANN
             setLayers(DEFAULT_LAYER_COUNT, DEFAULT_LAYER_SIZE);
         }
 
-        public MatrixD Feed(MatrixD networkInput)
-        {
-            var networkOutput = networkInput;
-            foreach (var layer in layers)
-                networkOutput = layer.feed(networkOutput);
-            return networkOutput;
-        }
-
-        public void feedForTrain(MatrixD networkInput)
-        {
-            var networkOutput = networkInput;
-            layers.First().feedForTrain(networkOutput);
-        }
-
-        public void backPropagation()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void train(MatrixD input, MatrixD expectedOutput)
-        {
-            var costLayer = new CostLayer(expectedOutput);
-            feedForTrain(input);
-
-            backPropagation();
-            // TODO
-        }
+        public MatrixD feed(MatrixD networkInput)
+            => this.InputLayer.feedforward(networkInput);
         
-        void setLayers(int layersCount, int layerSize)
+        public void train(MatrixD annInput, MatrixD annExpectedOutput)
+           => new Backpropagation().train(this, annInput, annExpectedOutput);
+        
+        public void setLayers(LinkedList<ANNLayer> layers)
+            => this.hiddenLayers = layers;
+
+        public void setLayers(int layersCount, int layerSize)
         {
-            layers = new ANNLayer[layersCount];
-            int i = 0;
-            this.layers[i++] = new InputLayer(this.inputSize);
-            while( i < layers.Count()-1 )
-                this.layers[i++] = new Layer(layerSize, layers[i-1].Size);
-            this.layers[i++] = new Layer(this.outputSize, layers[i-1].Size);
+            hiddenLayers = new LinkedList<ANNLayer>();
+            hiddenLayers.AddFirst(new HiddenLayer(layerSize, this.inputSize));
+            while (hiddenLayers.Count() < layersCount)
+                hiddenLayers.AddLast(new HiddenLayer(layerSize, this.hiddenLayers.Last.Value.LayerOutputSize));
         }
     }
 }
