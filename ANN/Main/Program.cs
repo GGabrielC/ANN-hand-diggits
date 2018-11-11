@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CloneExtensions;
+using ExtensionMethods;
 using Layers;
 using MathNet.Numerics.LinearAlgebra;
 using MNIST.IO;
@@ -21,69 +22,38 @@ namespace MAIN
                 "t10k-labels-idx1-ubyte.gz";
             String imagesPath = "C:/Users/Gabriel/source/repos/ConsoleApp1/ANN/MNIST/MNIST Input Files/" +
                 "t10k-images-idx3-ubyte.gz";
-            Program.sandBox3();
 
+            int lines = 4;
+            int cols = 4;
+            MatrixD m1 = MatrixD.Build.Random(lines, cols);
+            MatrixD m2 = MatrixD.Build.Random(lines, cols);
+            MatrixD m3 = m1.Transpose() * m2;
+            MatrixD m4 = m1.scalarMultiply(m2);
+            m1.print();
+            m2.print();
+            m3.print();
+            m4.print();
+            m3.EEquals(m4);
+
+            //checkIterCoords();
             Console.ReadLine();
         }
-
-        static public void sandBox3()
+        
+        public static void printArray(int[] arr)
         {
-            LinkedList<ANNLayer> list = new LinkedList<ANNLayer>();
-            list.AddLast(new InputLayer(1));
-            list.AddLast(new InputLayer(2));
-
-            if(list.First.Value != l2.First.Value)
-                Console.WriteLine("DA");
+            Console.Write("[");
+            for (int i = 0; i < arr.Length; i++)
+                Console.Write(arr[i]+",");
+            Console.WriteLine("]");
         }
 
-        static public void sandBox2()
+        public static void checkIterCoords()
         {
-            var a = EvenSequence(0, 10);
-            var en = a.GetEnumerator();
-            Console.WriteLine("1st: "+ en.Current);en.MoveNext();
-            Console.WriteLine("2nd: "+ en.Current);en.MoveNext();
-            Console.WriteLine("3rd: "+ en.Current);
-
-            Console.ReadLine();
+            MultiMatrix m = new MultiMatrix(new int[3] { 3,3,3 });
+            foreach (var c in m.AllCoords(new int[] {2,2,2}))
+                printArray(c);
         }
-
-        public static System.Collections.Generic.IEnumerable<int>
-            EvenSequence(int firstNumber, int lastNumber)
-        {
-            yield return 1;
-            yield return 2;
-            yield return 3;
-        }
-
-        static public void sandBox1()
-        {
-
-            String labelsPath = "C:/Users/Gabriel/source/repos/ConsoleApp1/ANN/MNIST/MNIST Input Files/" +
-                "t10k-labels-idx1-ubyte.gz";
-            String imagesPath = "C:/Users/Gabriel/source/repos/ConsoleApp1/ANN/MNIST/MNIST Input Files/" +
-                "t10k-images-idx3-ubyte.gz";
-
-            //var ann = new ANN_MNIST();
-            //ann.train(labelsPath, imagesPath);
-
-            var arr = new double[3, 3];
-            for (var i = 0; i < 3; i++)
-                for (var j = 0; j < 3; j++)
-                    arr[i, j] = (j + 1) * (i + 1);
-            var a = 2 * MatrixD.Build.DenseOfArray(arr);
-
-
-            for (var i = 0; i < 3; i++)
-                for (var j = 0; j < 3; j++)
-                    arr[i, j] = (j + 1) * (i + 1);
-            var b = MatrixD.Build.DenseOfArray(arr);
-
-            //var c = CostFunctions.squaredEuclidianDistance(a, b);
-
-            //Console.WriteLine(c.ToMatrixString());
-
-            Console.ReadLine();
-        }
+        
 
     }
 }

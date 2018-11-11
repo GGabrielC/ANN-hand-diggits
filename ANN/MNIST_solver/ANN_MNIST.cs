@@ -10,7 +10,7 @@ using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
 namespace MNIST_SOLVER
 {
-    public class ANN_MNIST : ArtificalNN
+    public class ANN_MNIST : Network
     {
         public static readonly int IMAGE_WIDTH = 28;
         public static readonly int IMAGE_HEIGHT = 28;
@@ -30,7 +30,7 @@ namespace MNIST_SOLVER
         public MatrixD feed(String imagesPath)
         {
             var images = FileReaderMNIST.LoadImages(imagesPath);
-            return base.feed( asInput(images) );
+            return base.feedForward( asInput(images) );
         }
 
         

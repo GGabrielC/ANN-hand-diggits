@@ -37,3 +37,6 @@ C:\Users\Gabriel\source\repos\ConsoleApp1\UnitTestProject1\bin\Debug\System.Diag
 C:\Users\Gabriel\source\repos\ConsoleApp1\UnitTestProject1\obj\Debug\UnitTestProject1.csproj.CopyComplete
 C:\Users\Gabriel\source\repos\ConsoleApp1\UnitTestProject1\obj\Debug\UnitTestProject1.dll
 C:\Users\Gabriel\source\repos\ConsoleApp1\UnitTestProject1\obj\Debug\UnitTestProject1.pdb
+C:\Users\Gabriel\source\repos\ConsoleApp1\UnitTestProject1\bin\Debug\MathNet.Numerics.dll
+C:\Users\Gabriel\source\repos\ConsoleApp1\UnitTestProject1\bin\Debug\CloneExtensions.dll
+C:\Users\Gabriel\source\repos\ConsoleApp1\UnitTestProject1\bin\Debug\MathNet.Numerics.xml

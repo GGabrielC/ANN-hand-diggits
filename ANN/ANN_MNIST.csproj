@@ -108,16 +108,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANN\ArtificialNN.cs" />
+    <Compile Include="ANN\ExtensionMethods\ExtensionMethodsArray.cs" />
     <Compile Include="ANN\ExtensionMethods\ExtensionMethodsContainers.cs" />
-    <Compile Include="ANN\ExtensionMethods\ExtensionMethodsMatrix.cs" />
-    <Compile Include="ANN\Backpropagation.cs" />
+    <Compile Include="ANN\ExtensionMethods\ExtensionMethodsMatrixD.cs" />
+    <Compile Include="ANN\ExtensionMethods\NumberExtensions.cs" />
+    <Compile Include="ANN\Layers\ClassicLayers\ActivationLayer.cs" />
+    <Compile Include="ANN\Layers\ClassicLayers\Layer.cs" />
+    <Compile Include="ANN\Layers\LayeredANN.cs" />
+    <Compile Include="ANN\Layers\Network.cs" />
+    <Compile Include="ANN\Layers\ClassicLayers\BiasLayer.cs" />
+    <Compile Include="ANN\Layers\ClassicLayers\WeightLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\ConvolutionLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Utils\ArrayBuilder.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Sliders\Kernel.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Utils\Filter3D.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\NormalizationLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\PoolingLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Utils\MultiMatrix.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Sliders\Pooler.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Sliders\Slider.cs" />
+    <Compile Include="ANN\TrainAlgorithm\Backprop.cs" />
+    <Compile Include="ANN\TrainAlgorithm\CostLayer.cs" />
+    <Compile Include="ANN\TrainAlgorithm\Trainer.cs" />
+    <Compile Include="GlobalRandom.cs" />
     <Compile Include="MNIST_solver\ANN_MNIST.cs" />
-    <Compile Include="ANN\Layer\ANNLayer.cs" />
-    <Compile Include="ANN\Layer\CostLayer.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ANN\ANNTrainManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -127,7 +143,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ANN\Utils\Functions.cs" />
-    <Compile Include="ANN\Layer\WeightedLayer.cs" />
     <Content Include="StarMath.XML" />
   </ItemGroup>
   <ItemGroup />
