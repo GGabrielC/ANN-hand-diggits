@@ -108,29 +108,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANN\ExtensionMethods\ExtensionMethodsArray.cs" />
-    <Compile Include="ANN\ExtensionMethods\ExtensionMethodsContainers.cs" />
-    <Compile Include="ANN\ExtensionMethods\ExtensionMethodsMatrixD.cs" />
-    <Compile Include="ANN\ExtensionMethods\NumberExtensions.cs" />
+    <Compile Include="ExtensionMethods\ExtensionMethodsArray.cs" />
+    <Compile Include="ExtensionMethods\ExtensionMethodsContainers.cs" />
+    <Compile Include="ExtensionMethods\ExtensionMethodsMatrixD.cs" />
+    <Compile Include="ExtensionMethods\NumberExtensions.cs" />
     <Compile Include="ANN\Layers\ClassicLayers\ActivationLayer.cs" />
     <Compile Include="ANN\Layers\ClassicLayers\Layer.cs" />
+    <Compile Include="Utils\MultiMatrixBuilder.cs" />
     <Compile Include="ANN\Layers\LayeredANN.cs" />
     <Compile Include="ANN\Layers\Network.cs" />
     <Compile Include="ANN\Layers\ClassicLayers\BiasLayer.cs" />
     <Compile Include="ANN\Layers\ClassicLayers\WeightLayer.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\ConvolutionLayer.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\Utils\ArrayBuilder.cs" />
+    <Compile Include="Utils\ArrayBuilder.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\Sliders\Kernel.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\Utils\Filter3D.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\NormalizationLayer.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\PoolingLayer.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\Utils\MultiMatrix.cs" />
+    <Compile Include="Utils\MultiMatrix.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\Sliders\Pooler.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\Sliders\Slider.cs" />
     <Compile Include="ANN\TrainAlgorithm\Backprop.cs" />
     <Compile Include="ANN\TrainAlgorithm\CostLayer.cs" />
     <Compile Include="ANN\TrainAlgorithm\Trainer.cs" />
-    <Compile Include="GlobalRandom.cs" />
+    <Compile Include="Global\ExtensionsRandom.cs" />
+    <Compile Include="Global\GlobalRandom.cs" />
     <Compile Include="MNIST_solver\ANN_MNIST.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,7 +143,7 @@
     <None Include="MNIST_solver\MNIST Input Files\t10k-labels-idx1-ubyte.gz" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANN\Utils\Functions.cs" />
+    <Compile Include="Utils\Functions.cs" />
     <Content Include="StarMath.XML" />
   </ItemGroup>
   <ItemGroup />

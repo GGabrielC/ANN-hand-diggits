@@ -17,7 +17,7 @@ namespace Layers
         public int OutSize { get => this.Activations.Count(); }
         public int InSize { get => this.Activations.Count(); }
         public FuncDD[] Activations => activations;
-        FuncDD[] DerivateActivations => derivateActivations;
+        public FuncDD[] DerivateActivations => derivateActivations;
 
         private FuncDD[] activations = null;
         private FuncDD[] derivateActivations = null;
@@ -42,6 +42,5 @@ namespace Layers
 
         private void setDerivateActivationFunctions()
             => this.derivateActivations = Functions.getDerivates(Activations);
-        
     }
 }

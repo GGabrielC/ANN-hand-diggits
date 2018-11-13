@@ -21,11 +21,11 @@ namespace Utils
         public static double ReluDerivate(Double x)
             => x < 0 ? 0 : 1;
 
-        static readonly Dictionary<FuncDD, FuncDD> derivates;
-        static void initDerivates()
+        protected static readonly Dictionary<FuncDD, FuncDD> derivates = new Dictionary<FuncDD, FuncDD>();
+        static Functions()
         {
-            derivates[ReLU] = ReluDerivate;
-            derivates[ReluDerivate] = ReLU;
+            derivates.Add(ReLU, ReluDerivate);
+            derivates.Add(ReluDerivate, ReLU);
         }
     }
 }

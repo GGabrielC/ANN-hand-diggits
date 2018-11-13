@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExtensionMethods;
-using GlobalItems;
+using Global;
 using FuncDD = System.Func<System.Double, System.Double>;
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
@@ -12,17 +12,25 @@ namespace Utils
 {
     public class MultiMatrix
     {
+        public static readonly MultiMatrixBuilder Build = new MultiMatrixBuilder();
+
         public double[] Data { get => this.data; }
-        public int[] Dimensions { get => this.dimensions; }
+        public int[] Dimensions {
+            get => this.dimensions;
+            set => this.dimensions = value.Where(x => x > 1).ToArray();
+        }
         public int DimensionCount { get => this.dimensions.Length; }
         public int Capacity { get => this.Data.Length; }
 
         double[] data;
         int[] dimensions;
 
+        public MultiMatrix()
+        { }
+
         public MultiMatrix(int[] dimensions)
         {
-            setDimensions(dimensions);
+            Dimensions = dimensions;
             setMatrixSpace();
         }
 
@@ -33,17 +41,14 @@ namespace Utils
         }
 
         public MultiMatrix(MultiMatrix multiMatrix)
-        {
-            setDimensions(multiMatrix.dimensions);
-            setData(multiMatrix.Data);
-        }
-
-        public MultiMatrix(int[] dimensions, double[] data)
-        {
-            this.dimensions = dimensions.ShallowCopy();
-            this.data = data;
-        }
+            => setData(multiMatrix.data, multiMatrix.dimensions);
         
+        public MultiMatrix(int[] dimensions, double[] data)
+            => setData(data, dimensions);
+
+        public bool EEquals(MultiMatrix mm)
+            => this.dimensions.EEquals(mm.dimensions) && this.data.EEquals(mm.data);
+
         public double at(int[] coordinates)
             => data[findIndex(coordinates)];
 
@@ -70,7 +75,7 @@ namespace Utils
 
         public bool isValidCoordinate(int coordinate, int axis)
             => coordinate >= 0 && coordinate < this.dimensions[axis];
-        
+
         /*
         public bool areLastCoords(int[] coordinates)
             => coordinates.AllIndex(isLastCoord);
@@ -93,14 +98,24 @@ namespace Utils
 
         public MultiMatrix padded(int[] padding)
         {
-            var m = new MultiMatrix(this.dimensions.addTo(padding).addTo(padding));
+            var m = new MultiMatrix(this.dimensions.add(padding).add(padding));
             foreach (var coords in this.AllCoords())
-                m.setAt(coords.addTo(padding), this.at(coords));
+                m.setAt(coords.add(padding), this.at(coords));
             return m;
         }
 
-        public int[] getNextCoords(int[] coordinates)
-            => getNextCoords(coordinates, ArrayBuilder.repeat(1, coordinates.Length));
+        public int[] getNextCoords(int[] coordinates, int stride=1)
+        {
+            var next = coordinates.ShallowCopy();
+            for (int i = next.Length - 1; i >= 0; i--)
+            {
+                next[i] += stride;
+                if (isValidCoordinate(next[i], i))
+                    return next;
+                next[i] = 0;
+            }
+            return null;
+        }
 
         public int[] getNextCoords(int[] coordinates, int[] strides)
         {
@@ -118,34 +133,69 @@ namespace Utils
         public MultiMatrix copy()
             => new MultiMatrix(this);
 
+        public MultiMatrix scalarMultiply(MultiMatrix m)
+        {
+            var result = new MultiMatrix();
+            result.useData(this.data.scalarMultiply(m.data), this.dimensions);
+            return result;
+        }
+
+        public MultiMatrix scalarMultiply(double scalar)
+        {
+            var result = new MultiMatrix();
+            result.useData(this.data.scalarMultiply(scalar), this.dimensions);
+            return result;
+        }
+
+        public MultiMatrix add(MultiMatrix m)
+        {
+            if (!this.Dimensions.EEquals(m.Dimensions))
+                throw new Exception("Matrices have diffrent dimensions.They cannot be added.");
+            return new MultiMatrix(this.dimensions, this.Data.add(m.Data));
+        }
+
         public MultiMatrix map(FuncDD func)
         {
-            var newMatrix = new MultiMatrix(this.dimensions);
-            newMatrix.data = this.data.map(func);
+            var newMatrix = new MultiMatrix();
+            newMatrix.useData(this.data.map(func), this.dimensions);
             return newMatrix;
         }
 
-        public void setRandom()
+        public void setRandomData()
         {
             for (int i = 0; i < this.data.Length; i++)
-                this.data[i] = GlobalRandom.Instance.NextDouble(); //TODO range
+                this.data[i] = GlobalRandom.NextDouble();
+        }
+
+        public void setRandomData(double minVal, double maxVal)
+        {
+            for (int i = 0; i < this.data.Length; i++)
+                this.data[i] = GlobalRandom.NextDouble(minVal, maxVal);
+        }
+
+        public void setData(double[] data, int[] dimensions)
+        {
+            if (data.Length != dimensions.product())
+                throw new Exception("data does not have provided element count");
+            this.data = data.ShallowCopy();
+            this.Dimensions = dimensions.ShallowCopy();
+        }
+
+        public void useData(double[] data, int[] dimensions)
+        {
+            this.data = data;
+            this.Dimensions = dimensions;
         }
         
-        private void setDimensions(int[] dimensions)
-            => this.dimensions = dimensions.Where(x => x > 1).ToArray();
-
         private void setDimensions(MultiMatrix[] multiMatrices)
         {
             this.dimensions = new int[1 + multiMatrices[0].DimensionCount];
             this.dimensions[0] = multiMatrices.Length;
             multiMatrices[0].dimensions.CopyTo(this.dimensions, 1);
         }
-
-        private void setData(double[] data)
-            => this.data = data.ShallowCopy();
-
+        
         private void setMatrixSpace()
-            => this.data = new double[this.dimensions.multiplyTo()];
+            => this.data = new double[this.dimensions.product()];
 
         private void setMatrixSpace(MultiMatrix[] multiMatrices)
         {

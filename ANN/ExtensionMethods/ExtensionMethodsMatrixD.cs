@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using Global;
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,24 @@ namespace ExtensionMethods
             for (var i = 0; i < rows; i++)
                 for (var j = 0; j < cols; j++)
                     matrix[i, j] = value;
+            return MatrixD.Build.DenseOfArray(matrix);
+        }
+
+        public static MatrixD random(this MatrixBuilder<double> mb, int rows, int cols)
+        {
+            var matrix = new double[rows, cols];
+            for (var i = 0; i < rows; i++)
+                for (var j = 0; j < cols; j++)
+                    matrix[i, j] = GlobalRandom.NextDouble();
+            return MatrixD.Build.DenseOfArray(matrix);
+        }
+
+        public static MatrixD random(this MatrixBuilder<double> mb, int rows, int cols, double minVal, double maxVal)
+        {
+            var matrix = new double[rows, cols];
+            for (var i = 0; i < rows; i++)
+                for (var j = 0; j < cols; j++)
+                    matrix[i, j] = GlobalRandom.NextDouble(minVal, maxVal);
             return MatrixD.Build.DenseOfArray(matrix);
         }
 

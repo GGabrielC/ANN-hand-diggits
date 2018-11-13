@@ -4,89 +4,114 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExtensionMethods;
-using GlobalItems;
+using Global;
 using Utils;
 
 namespace Sliders
 {
+    // gradients only for stride 1
     public class Kernel:Slider
     {
         public override int DimensionCount => this.weights.DimensionCount; 
         public override int[] Dimensions => this.weights.Dimensions;
         public override int[] Stride => this.stride;
 
-        public MultiMatrix FilterMatrix => weights;
+        public MultiMatrix Weights => weights;
 
         private MultiMatrix weights;
         private int[] stride;
 
         public Kernel(int[] dimensions)
         {
-            this.weights = new MultiMatrix(dimensions);
+            this.weights = MultiMatrix.Build.random(dimensions);
             this.stride = ArrayBuilder.repeat(1, this.DimensionCount);
         }
 
         public Kernel(int[] dimensions, int[] stride)
         {
-            this.weights = new MultiMatrix(dimensions);
+            this.weights = MultiMatrix.Build.random(dimensions);
+            this.stride = stride.ShallowCopy();
+        }
+
+        public Kernel(int[] dimensions, double[] weights)
+        {
+            this.weights = new MultiMatrix(dimensions, weights);
+            this.stride = ArrayBuilder.repeat(1, this.DimensionCount);
+        }
+
+        public Kernel(int[] dimensions, double[] weights, int[] stride)
+        {
+            this.weights = new MultiMatrix(dimensions, weights);
+            this.stride = stride.ShallowCopy();
+        }
+
+        public Kernel(MultiMatrix weights)
+        {
+            this.weights = weights.copy();
+            this.stride = ArrayBuilder.repeat(1, this.DimensionCount);
+        }
+
+        public Kernel(MultiMatrix weights, int[] stride)
+        {
+            this.weights = weights.copy();
             this.stride = stride.ShallowCopy();
         }
 
         public Kernel(Kernel filter)
         {
             this.weights = new MultiMatrix(filter.weights);
-            this.stride = ArrayBuilder.repeat(1, this.DimensionCount);
+            this.stride = filter.Stride.ShallowCopy();
         }
 
-        public override void applyAt(MultiMatrix inData, MultiMatrix outData, int[] coords)
-            => outData.setAt(coords, getSumAt(inData, coords));
-        
-        public override int[] getOutputDims(MultiMatrix input)
-            => getOutputDims(input.Dimensions);
-
-        public override int[] getOutputDims(int[] inputDimensions)
+        public override MultiMatrix slideOver(MultiMatrix inData)
         {
-            var outputDims = inputDimensions.ShallowCopy();
-            for (int i = 0; i < outputDims.Length; i++)
-                outputDims[i] -= inputDimensions[i] / 2; // division by 2 expects odd number
-            return outputDims;
+            var outData = new MultiMatrix(getOutputDims(inData));
+            foreach (var coords in outData.AllCoords())
+                outData.setAt(coords, getSumAt(inData, coords.mapWith(Stride, (c, s) => c * s)));
+            return outData;
         }
         
         public override void backwardLearn(MultiMatrix inData, MultiMatrix gradient, double learnRate)
         {
-            var gradientW = gradientWeights(inData, gradient);
+            var gradientW = getGradientWeights(inData, gradient);
             this.weights.Data.changeWith(gradientW.Data, (w, g) => w-learnRate*g);
         }
 
         public override MultiMatrix getGradientInput(MultiMatrix inData, MultiMatrix gradient)
-            => gradientInput(gradient);
+        {
+            var gradientIn = MultiMatrix.Build.repeat(inData.Dimensions, 0);
+            foreach (var coords in gradient.AllCoords())
+                foreach (var offset in Weights.AllCoords())
+                    gradientIn.addAt(coords.add(offset), gradient.at(coords) * Weights.at(offset));
+            return gradientIn;
+        }
 
         public double getSumAt(MultiMatrix inData, int[] coord)
         {
             var sum = 0.0;
             foreach (var offset in this.weights.AllCoords())
             {
-                var nearbyCoord = coord.addTo(offset);
+                var nearbyCoord = coord.add(offset);
                 if (inData.areValidCoords(nearbyCoord))
-                    sum += inData.at(coord.addTo(offset)) * weights.at(offset);
+                    sum += inData.at(coord.add(offset)) * weights.at(offset);
             }
             return sum;
         }
 
-        public MultiMatrix gradientInput(MultiMatrix gradient)
+        public MultiMatrix getGradientInputWithRotation(MultiMatrix gradient)
         {
             var correlationMatrix = new Kernel(this);
             correlationMatrix.rotate90();
-            return correlationMatrix.slideOver(gradient.padded(this.Dimensions.addEachTo(-1)));
+            return correlationMatrix.slideOver(gradient.padded(this.Dimensions.add(-1)));
         }// TODO check ?
-
-        public MultiMatrix gradientWeights(MultiMatrix inData, MultiMatrix gradient)
+        
+        public MultiMatrix getGradientWeights(MultiMatrix inData, MultiMatrix gradient)
         {
             var gradientW = new MultiMatrix(this.Dimensions);
             foreach (var coord in gradient.AllCoords())
                 foreach (var offset in this.weights.AllCoords())
                 {
-                    var nearbyCoord = coord.addTo(offset);
+                    var nearbyCoord = coord.add(offset);
                     gradientW.addAt(offset, gradient.at(coord) * inData.at(nearbyCoord));
                 }
             return gradientW;

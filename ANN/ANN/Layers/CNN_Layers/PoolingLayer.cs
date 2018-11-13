@@ -25,7 +25,7 @@ namespace Layers
         public PoolingLayer(int[] sliderDimensions, int inSize)
         {
             this.inSize = inSize;
-            outSize = pooler.getOutputDims(inDimensions).multiplyTo();
+            outSize = pooler.getOutputDims(inDimensions).product();
             this.pooler = new Pooler(sliderDimensions);
         }
 

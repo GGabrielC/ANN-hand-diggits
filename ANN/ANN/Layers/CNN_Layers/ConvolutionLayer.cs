@@ -25,8 +25,8 @@ namespace Layers
 
         public ConvolutionLayer(int[] sliderDimensions, int depth, int inSize, bool withPadding = false)
         {
-            inSize = inSize;
-            outSize = kernels.First().getOutputDims(inDimensions).multiplyTo();
+            this.inSize = inSize;
+            outSize = kernels.First().getOutputDims(inDimensions).product();
             this.kernels = new Kernel[depth];
             for (var i = 0; i < this.kernels.Length; i++)
                 this.kernels[i] = new Kernel(sliderDimensions);

@@ -19,7 +19,10 @@ namespace Layers
         private double[] biases = null;
 
         public BiasLayer(int inputSize)
-            => setBiases(inputSize);
+            => initBiases(inputSize);
+
+        public BiasLayer(double[] biases)
+            => this.biases = biases.ShallowCopy();
         
         public MatrixD forward(MatrixD inputs)
             => inputs.addEachLine(this.Biases);
@@ -30,11 +33,13 @@ namespace Layers
         public void backwardLearn(MatrixD inputs, MatrixD gradient, double learnRate)
             => biases.changeWith(gradient.ColumnSums().AsArray(), (b, g) => b - learnRate*g);
 
-        private void setBiases( int inputSize)
+        public void setFirstBiases(double[] biases)
+            => biases.CopyTo(this.biases, 0);
+        
+        private void initBiases( int inputSize)
             => this.biases = Vector<Double>.Build.Random(inputSize).AsArray();
 
         public MatrixD getDerivateToInput(MatrixD inputs)
             => MatrixD.Build.DenseOfRows(new double[1][] { Enumerable.Repeat(1.0, Biases.Count()).ToArray() });
-        
     }
 }

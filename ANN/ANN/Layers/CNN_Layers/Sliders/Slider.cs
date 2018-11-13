@@ -12,20 +12,22 @@ namespace Sliders
         public abstract int DimensionCount { get; }
         public abstract int[] Dimensions { get; }
         public abstract int[] Stride { get; }
-        
-        public MultiMatrix slideOver(MultiMatrix inData)
-        {
-            var outData = new MultiMatrix(getOutputDims(inData));
-            foreach (var coords in outData.AllCoords(this.Stride))
-                applyAt(inData, outData, coords);
-            return outData;
-        }
 
-        public abstract void applyAt(MultiMatrix inData, MultiMatrix outData, int[] coords);
-        public abstract int[] getOutputDims(MultiMatrix input);
-        public abstract int[] getOutputDims(int [] inputDimensions);
+        public abstract MultiMatrix slideOver(MultiMatrix inData);
 
         public abstract MultiMatrix getGradientInput(MultiMatrix inData, MultiMatrix gradient);
         public abstract void backwardLearn(MultiMatrix inData, MultiMatrix gradient, double learnRate);
+
+        public int[] getOutputDims(MultiMatrix input)
+            => getOutputDims(input.Dimensions);
+
+        public int[] getOutputDims(int[] inDims)
+        {
+            var outputDims = new int[this.DimensionCount];
+            for (int i = 0; i < outputDims.Length; i++)
+                outputDims[i] = (int)Math.Ceiling((inDims[i]-Dimensions[i])/(double)Stride[i])+1;
+            return outputDims;
+        }
+
     }
 }

@@ -12,15 +12,18 @@ namespace Layers
 {
     public class WeightLayer: Layer
     {
-        public int OutSize { get => this.Weights.RowCount; }
-        public int InSize { get => this.Weights.ColumnCount; }
+        public int InSize { get => this.Weights.RowCount; }
+        public int OutSize { get => this.Weights.ColumnCount; }
         public MatrixD Weights { get => weights; }
         
         private MatrixD weights = null;
 
         public WeightLayer(int inputSize, int outputSize)
             => setWeights(inputSize, outputSize);
-        
+
+        public WeightLayer(MatrixD weights)
+            => this.weights = MatrixD.Build.DenseOfMatrix(weights);
+
         public MatrixD forward(MatrixD inputs)
             => inputs * this.Weights;
 
@@ -37,12 +40,13 @@ namespace Layers
         public void backwardLearn(MatrixD inputs, MatrixD gradients, double learnRate)
             => this.weights -= gradientWeights(inputs, gradients).scalarMultiply(learnRate); 
 
-        public MatrixD gradientWeights(MatrixD inputs, MatrixD gradient)
+        public MatrixD gradientWeights(MatrixD inputs, MatrixD gradients)
         {
             var gradientW = new double[InSize, OutSize];
-            for (var i = 0; i < InSize; i++)
-                for (var j = 0; j < OutSize; j++)
-                    gradientW[i,j] = gradient.At(j,0)*inputs.At(i,0);
+            for(var example=0; example<inputs.RowCount; example++)
+                for (var i = 0; i < InSize; i++)
+                    for (var j = 0; j < OutSize; j++)
+                        gradientW[i,j] += gradients.At(example, j)*inputs.At(example, i);
             return MatrixD.Build.DenseOfArray(gradientW);
         }
 

@@ -29,7 +29,7 @@ namespace ExtensionMethods
             result.applyFunc(func);
             return result;
         }
-
+        
         public static Boolean AllIndex<T>(this T[] arr1, Func<T,int,bool> func)
         {
             for (int i = 0; i < arr1.Length; i++)
@@ -37,7 +37,7 @@ namespace ExtensionMethods
                     return false;
             return true;
         }
-
+        
         public static void changeWith<T>(this T[] arr1, T[] arr2, Func<T,T,T> f)
         {
             for (int i = 0; i < arr1.Length; i++)
@@ -57,13 +57,13 @@ namespace ExtensionMethods
                 f(arr1[i], arr2[i]);
         }
 
-        public static void add(this int[] arr1, int[] arr2)
+        public static void addIn(this int[] arr1, int[] arr2)
         {
             for (int i = 0; i < arr2.Length; i++)
                 arr1[i] += arr2[i];
         }
 
-        public static int[] addTo(this int[] arr1, int[] arr2)
+        public static int[] add(this int[] arr1, int[] arr2)
         {
             if(arr1.Length < arr2.Length)
             {
@@ -72,24 +72,43 @@ namespace ExtensionMethods
                 arr2 = aux;
             }
             var sum = arr1.ShallowCopy();
-            sum.add(arr2);
+            sum.addIn(arr2);
             return sum;
         }
 
-        public static void addEach(this int[] arr, int num)
+        public static void addIn(this double[] arr1, double[] arr2)
+        {
+            for (int i = 0; i < arr2.Length; i++)
+                arr1[i] += arr2[i];
+        }
+
+        public static double[] add(this double[] arr1, double[] arr2)
+        {
+            if (arr1.Length < arr2.Length)
+            {
+                var aux = arr1;
+                arr1 = arr2;
+                arr2 = aux;
+            }
+            var sum = arr1.ShallowCopy();
+            sum.addIn(arr2);
+            return sum;
+        }
+
+        public static void addIn(this int[] arr, int num)
         {
             for (int i = 0; i < arr.Length; i++)
                 arr[i] += num;
         }
 
-        public static int[] addEachTo(this int[] arr, int num)
+        public static int[] add(this int[] arr, int num)
         {
             var sum = arr.ShallowCopy();
-            sum.addEach(num);
+            sum.addIn(num);
             return sum;
         }
         
-        public static int multiplyTo(this int[] arr)
+        public static int product(this int[] arr)
         {
             var result = 1;
             for (int i = 0; i < arr.Length; i++)
@@ -99,10 +118,30 @@ namespace ExtensionMethods
             return result;
         }
 
-        public static void multiply(this double[] arr1, double[] arr2)
+        public static void multiplyIn(this double[] arr1, double[] arr2)
         {
             for (int i = 0; i < arr2.Length; i++)
                 arr1[i] *= arr2[i];
+        }
+
+        public static double[] scalarMultiply(this double[] arr1, double[] arr2)
+        {
+            var arr = arr1.ShallowCopy();
+            arr.multiplyIn(arr2);
+            return arr;
+        }
+
+        public static void scalarMultiplyIn(this double[] arr, double scalar)
+        {
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] *= scalar;
+        }
+
+        public static double[] scalarMultiply(this double[] arr1, double scalar)
+        {
+            var arr = arr1.ShallowCopy();
+            arr.scalarMultiplyIn(scalar);
+            return arr;
         }
 
         public static MatrixD toMatrixD(this MultiMatrix[] data)
@@ -112,6 +151,34 @@ namespace ExtensionMethods
             for (var i = 0; i < countEntries; i++)
                 dataArr[i] = data[i].Data;
             return MatrixD.Build.DenseOfRowArrays(dataArr);
+        }
+
+        public static bool EEquals(this double[] m1, double[] m2, double epsilon = 0.000001)
+        {
+            if (m1.Length != m2.Length)
+                return false;
+            for (var i = 0; i < m1.Length; i++)
+                if (!m1[i].EEquals(m2[i], epsilon))
+                    return false;
+            return true;
+        }
+
+        public static bool EEquals(this int[] m1, int[] m2)
+        {
+            if (m1.Length != m2.Length)
+                return false;
+            for (var i = 0; i < m1.Length; i++)
+                if (m1[i] != m2[i])
+                    return false;
+            return true;
+        }
+
+        public static void print<T>(this T[] arr)
+        {
+            Console.Write("[ ");
+            for (int i = 0; i < arr.Length; i++)
+                Console.Write("" + arr[i].ToString() + ", ");
+            Console.WriteLine("]");
         }
     }
 }
