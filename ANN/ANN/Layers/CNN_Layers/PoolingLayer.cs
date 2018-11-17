@@ -16,37 +16,72 @@ namespace Layers
         public int InSize => inSize;
         public int OutSize => outSize;
 
-        int[] inDimensions => throw new NotImplementedException();
-        Pooler pooler;
+        public Pooler Pooler {
+            get => pooler;
+            private set
+            {
+                pooler = value;
+                OutDims = pooler.getOutputDims(inDims);
+            }
+        }
 
+        public int[] InDims {
+            get => inDims.ShallowCopy();
+            private set
+            {
+                inDims = value.ShallowCopy();
+                inSize = inDims.product();
+            }
+        }
+
+        public int[] OutDims
+        {
+            get => outDims.ShallowCopy();
+            private set
+            {
+                if (!pooler.getOutputDims(inDims).EEquals(value))
+                    throw new Exception("Output dims do not fit input and pooler!");
+                outDims = value.ShallowCopy();
+                outSize = outDims.product();
+            }
+        }
+
+        int[] inDims;
+        int[] outDims;
+        Pooler pooler;
         int inSize;
         int outSize;
 
-        public PoolingLayer(int[] sliderDimensions, int inSize)
+        public PoolingLayer(Pooler pooler, int[] inDimensions)
+            => set(pooler, inDimensions);
+
+        public PoolingLayer(int[] sliderDimensions, int[] inDimensions)
+            => set(new Pooler(sliderDimensions), inDimensions);
+
+        public void set(Pooler pooler, int[] inDims)
         {
-            this.inSize = inSize;
-            outSize = pooler.getOutputDims(inDimensions).product();
-            this.pooler = new Pooler(sliderDimensions);
+            this.InDims = inDims;
+            this.Pooler = pooler;
         }
 
         public MatrixD forward(MatrixD inputs)
-            => forward(inputs.toMultiMatrix(this.inDimensions)).toMatrixD();
+            => forward(inputs.toMultiMatrix(this.InDims)).toMatrixD();
         
-        private MultiMatrix forward(MultiMatrix inputs)
+        public MultiMatrix forward(MultiMatrix inputs)
             => pooler.slideOver(inputs);
 
-        private MultiMatrix[] forward(MultiMatrix[] inputs)
+        public MultiMatrix[] forward(MultiMatrix[] inputs)
             => inputs.map(mm => forward(mm.copy()));
 
         public MatrixD backward(MatrixD inputs, MatrixD gradients)
-            => backward(inputs.toMultiMatrix(this.inDimensions),
-                        gradients.toMultiMatrix(this.inDimensions)
+            => backward(inputs.toMultiMatrix(this.InDims),
+                        gradients.toMultiMatrix(this.OutDims)
                         ).toMatrixD();
 
-        private MultiMatrix[] backward(MultiMatrix[] inputs, MultiMatrix[] gradients)
+        public MultiMatrix[] backward(MultiMatrix[] inputs, MultiMatrix[] gradients)
             => inputs.mapWith(gradients, (i,g) => backward(i, g) );
 
-        private MultiMatrix backward(MultiMatrix input, MultiMatrix gradient)
+        public MultiMatrix backward(MultiMatrix input, MultiMatrix gradient)
             => pooler.getGradientInput(input, gradient);
 
         public void backwardLearn(MatrixD inputs, MatrixD gradient, double learnRate)

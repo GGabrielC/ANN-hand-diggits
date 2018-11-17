@@ -14,5 +14,13 @@ namespace ExtensionMethods
                 return false;
             return true;
         }
+
+        public static int Abs(this int num)
+        {
+            if (num < 0)
+                return -num;
+            return num;
+        }
+        
     }
 }

@@ -15,5 +15,13 @@ namespace Utils
                 arr[i] = value;
             return arr;
         }
+
+        public static T[] repeat<T>(Func<T> f, int times)
+        {
+            var arr = new T[times];
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] = f();
+            return arr;
+        }
     }
 }

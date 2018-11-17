@@ -50,6 +50,7 @@ namespace ANN
 
         private void addLayers()
         {
+            /*
             var depth = 3;
             addLayer(new ConvolutionLayer(new int[] { 3, 3 }, depth, inSize));
             addLayer(new ConvolutionLayer(new int[] { depth, 3, 3 }, depth, LastLayerOutSize));
@@ -60,7 +61,7 @@ namespace ANN
             addLayer(new ConvolutionLayer(new int[] { depth, 3, 3 }, depth, LastLayerOutSize));
             addLayer(new NormalizationLayer(LastLayerOutSize));
             addLayer(new PoolingLayer(new int[] { depth, 3, 3 }, LastLayerOutSize));
-
+            */
             int countNeuronLeyers = 5;
             for (var i = 0; i < countNeuronLeyers; i++)
             {

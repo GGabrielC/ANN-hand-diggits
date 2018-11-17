@@ -139,7 +139,7 @@ namespace UT_Layers
             var learnRate = 0.5;
             var kernel = new Kernel(new int[] { 2, 2 }, weights);
             var gradientW = kernel.getGradientWeights(inData, gradientNext);
-            var expectedWeights = kernel.Weights.add(gradientW.scalarMultiply(-learnRate));
+            var expectedWeights = kernel.Weights+(gradientW.scalarMultiply(-learnRate));
 
             kernel.backwardLearn(inData, gradientNext, learnRate);
             Assert.IsTrue(kernel.Weights.EEquals(expectedWeights));

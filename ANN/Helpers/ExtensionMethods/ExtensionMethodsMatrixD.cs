@@ -112,10 +112,10 @@ namespace ExtensionMethods
         public static MultiMatrix[] toMultiMatrix(this MatrixD data, int[] entryDimensions)
         {
             int countEntries = data.RowCount;
-            var dataArr = data.AsRowArrays();
+            var dataArr = data.ToRowArrays();
             MultiMatrix[] matrices = new MultiMatrix[countEntries];
             for (int i = 0; i < countEntries; i++)
-                matrices[i] = new MultiMatrix(entryDimensions, dataArr[i]);
+                matrices[i] = MultiMatrix.Build.useData(dataArr[i], entryDimensions);
             return matrices;
         }
     }

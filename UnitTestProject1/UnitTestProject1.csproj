@@ -122,6 +122,9 @@
     <Compile Include="ANN\Layers\CNN_Layers\PoolingLayer.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\Sliders\Kernel.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\Sliders\Pooler.cs" />
+    <Compile Include="Helpers\ExtensionMethods\ExtensionMethodsArray.cs" />
+    <Compile Include="Helpers\Global\GlobalRandom.cs" />
+    <Compile Include="Helpers\MultiMatrix\MultiMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

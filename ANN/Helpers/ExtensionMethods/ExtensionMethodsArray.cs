@@ -17,31 +17,55 @@ namespace ExtensionMethods
             return copy;
         }
 
+        public static void applyFunc<T>(this T[] arr, Func<T> func)
+        {
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] = func();
+        }
+
         public static void applyFunc<T>(this T[] arr, Func<T, T> func)
         {
             for (int i = 0; i < arr.Length; i++)
                 arr[i] = func(arr[i]);
         }
 
+        //public static IEnumerable<Tm> map<T,Tm>(this IEnumerable<T> elems, Func<T, Tm> func)
+          //  => elems.Select( func );
+        
+        public static Tm[] map<Tm, T>(this T[] arr, Func<T, Tm> func)
+        {
+            Tm[] result = new Tm[arr.Length];
+            for (int i = 0; i < arr.Length; i++)
+                result[i] = func(arr[i]);
+            return result;
+        }
+        
+        public static Tm[] mapWith<Tm, T,T2>(this T[] arr, T2[] arr2, Func<T, T2, Tm> func)
+        {
+            Tm[] result = new Tm[arr.Length];
+            for (int i = 0; i < arr.Length; i++)
+                result[i] = func(arr[i],arr2[i]);
+            return result;
+        }
+
+        public static void forEach<T>(this T[] arr, Action<T> f)
+        {
+            foreach (var e in arr)
+                f(e);
+        }
+
+        public static void forEachWith<T,T2>(this T[] arr1, T2[] arr2, Action<T, T2> f)
+        {
+            for (int i = 0; i < arr1.Length; i++)
+                f(arr1[i], arr2[i]);
+        }
+
+        /*
         public static T[] map<T>(this T[] arr, Func<T, T> func)
         {
             var result = arr.ShallowCopy();
             result.applyFunc(func);
             return result;
-        }
-        
-        public static Boolean AllIndex<T>(this T[] arr1, Func<T,int,bool> func)
-        {
-            for (int i = 0; i < arr1.Length; i++)
-                if ( false == func(arr1[i], i))
-                    return false;
-            return true;
-        }
-        
-        public static void changeWith<T>(this T[] arr1, T[] arr2, Func<T,T,T> f)
-        {
-            for (int i = 0; i < arr1.Length; i++)
-                arr1[i] = f(arr1[i], arr2[i]);
         }
 
         public static T[] mapWith<T>(this T[] arr1, T[] arr2, Func<T, T, T> f)
@@ -50,11 +74,19 @@ namespace ExtensionMethods
             mapped.changeWith(arr2, f);
             return mapped;
         }
-
-        public static void actionWith<T>(this T[] arr1, T[] arr2, Action<T, T> f)
+        */
+        public static Boolean AllIndex<T>(this T[] arr1, Func<T,int,bool> func)
         {
             for (int i = 0; i < arr1.Length; i++)
-                f(arr1[i], arr2[i]);
+                if ( false == func(arr1[i], i))
+                    return false;
+            return true;
+        }
+
+        public static void changeWith<T>(this T[] arr1, T[] arr2, Func<T,T,T> f)
+        {
+            for (int i = 0; i < arr1.Length; i++)
+                arr1[i] = f(arr1[i], arr2[i]);
         }
 
         public static void addIn(this int[] arr1, int[] arr2)
@@ -173,11 +205,34 @@ namespace ExtensionMethods
             return true;
         }
 
+        public static T[] flatten<T>(this T[][]arr)
+        {
+            int capacity = 0;
+            for (int i = 0; i < arr.Length; i++)
+                capacity += arr[i].Length;
+            var elements = 0;
+            var flat = new T[capacity];
+            foreach (var a in arr)
+            {
+                a.CopyTo(flat, elements);
+                elements += a.Length;
+            }
+            return flat;
+        }
+
         public static void print<T>(this T[] arr)
         {
             Console.Write("[ ");
             for (int i = 0; i < arr.Length; i++)
-                Console.Write("" + arr[i].ToString() + ", ");
+                Console.Write(arr[i].ToString() + ", ");
+            Console.WriteLine("]");
+        }
+
+        public static void printL<T>(this T[] arr)
+        {
+            Console.Write("[\n");
+            for (int i = 0; i < arr.Length; i++)
+                Console.Write(arr[i].ToString() + ",\n");
             Console.WriteLine("]");
         }
     }

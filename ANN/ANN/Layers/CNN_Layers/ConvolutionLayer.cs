@@ -16,64 +16,111 @@ namespace Layers
     {
         public int InSize => inSize;
         public int OutSize => outSize;
+        public int [] KernelDims => kernels[0].Dimensions;
+        public int KernelDimCount => kernels[0].Dimensions.Count();
+        
+        public Kernel[] Kernels
+        {
+            get => kernels.map(k => new Kernel(k));
+            private set
+            {
+                var kernelDims = value[0].Dimensions;
+                if(value.Count() == 1)
+                {
+                    kernels = value.map(k=> new Kernel(k));
+                    OutDims = value[0].getOutputDims(inDims);
+                }
+                else
+                {
+                    if (!value.All(x => x.Dimensions.EEquals(kernelDims)))
+                        throw new Exception("All kernels must have same dimensions!");
+                    kernels = value.map(k => new Kernel(k));
+                    var outDims = new int[1+KernelDimCount];
+                    outDims[0] = kernels.Count();
+                    kernels[0].getOutputDims(inDims).CopyTo(outDims,1);
+                    OutDims = outDims;
+                }
+            }
+        }
 
-        int[] inDimensions => throw new NotImplementedException();
-        Kernel[] kernels;
+        public int[] InDims
+        {
+            get => inDims.ShallowCopy();
+            private set
+            {
+                inDims = value.ShallowCopy();
+                inSize = inDims.product();
+            }
+        }
+
+        public int[] OutDims
+        {
+            get => outDims.ShallowCopy();
+            private set
+            {
+                outDims = value.ShallowCopy();
+                outSize = outDims.product();
+            }
+        }
 
         int inSize;
         int outSize;
+        int[] inDims;
+        int[] outDims;
+        Kernel[] kernels;
 
-        public ConvolutionLayer(int[] sliderDimensions, int depth, int inSize, bool withPadding = false)
+        public ConvolutionLayer(Kernel[] kernels, int[] inDims)
+            => set(kernels, inDims);
+
+        public ConvolutionLayer(int[] kernelDims, int depth, int[] inDims)
+            => set( ArrayBuilder.repeat( () => new Kernel(kernelDims), depth), inDims);
+
+        public ConvolutionLayer(Kernel kernel, int[] inDims)
+            => set(new Kernel[] {kernel}, inDims);
+
+        public ConvolutionLayer(ConvolutionLayer layer)
+            => set(layer.kernels, layer.inDims);
+
+        public void set(Kernel[] kernels, int[] inDims)
         {
-            this.inSize = inSize;
-            outSize = kernels.First().getOutputDims(inDimensions).product();
-            this.kernels = new Kernel[depth];
-            for (var i = 0; i < this.kernels.Length; i++)
-                this.kernels[i] = new Kernel(sliderDimensions);
+            InDims = inDims;
+            Kernels = kernels;
         }
-
-        public MatrixD forward(MatrixD inputs)
-            => forward(inputs.toMultiMatrix(this.inDimensions)).toMatrixD();
         
-        private MultiMatrix[] forward(MultiMatrix[] inputs)
-            => inputs.map( mm => forward(mm.copy()) );
+        public MatrixD forward(MatrixD entries)
+            => forward(entries.toMultiMatrix(this.inDims)).toMatrixD();
 
-        private MultiMatrix forward(MultiMatrix input)
-        {
-            MultiMatrix[] filteredData = new MultiMatrix[kernels.Length];
-            for (int i = 0; i < kernels.Length; i++)
-                filteredData[i] = kernels[i].slideOver(input);
-            return new MultiMatrix(filteredData);
-        }
+        public MultiMatrix[] forward(MultiMatrix[] entries)
+            => entries.map( mm => forward(mm) );
 
-        public MatrixD backward(MatrixD inputs, MatrixD gradients)
-            => backward(inputs.toMultiMatrix(this.inDimensions),
-                        gradients.toMultiMatrix(this.inDimensions)
+        public MultiMatrix forward(MultiMatrix entry)
+            => new MultiMatrix(kernels.map(k=>k.slideOver(entry)));
+
+        public MatrixD backward(MatrixD entries, MatrixD nextGradients)
+            => backward(entries.toMultiMatrix(this.inDims),
+                        nextGradients.toMultiMatrix(this.outDims)
                         ).toMatrixD();
 
-        private MultiMatrix[] backward(MultiMatrix[] inputs, MultiMatrix[] gradients)
-            => inputs.mapWith(gradients, (i, g) => backward(i, g));
+        public MultiMatrix[] backward(MultiMatrix[] entries, MultiMatrix[] nextGradients)
+            => entries.mapWith(nextGradients, (i, g) => backward(i, g));
 
-        private MultiMatrix backward(MultiMatrix input, MultiMatrix gradient)
+        public MultiMatrix backward(MultiMatrix entry, MultiMatrix nextGradient)
         {
-            MultiMatrix[] gradientInput = new MultiMatrix[kernels.Length];
-            for (int i = 0; i < kernels.Length; i++)
-                gradientInput[i] = kernels[i].getGradientInput(input, gradient);
-            return new MultiMatrix(gradientInput); //TODO sum ?
+            MultiMatrix[] gradientInput =
+                kernels.mapWith(nextGradient.split(), (k, g) => k.getGradientInput(entry, g));
+            return gradientInput.Aggregate(MultiMatrix.Build.repeat(entry.Dimensions, 0),
+                                            (sum, el) => sum + el);
         }
 
-        public void backwardLearn(MatrixD inputs, MatrixD gradients, double learnRate)
-            => backwardLearn(inputs.toMultiMatrix(this.inDimensions),
-                             gradients.toMultiMatrix(this.inDimensions),
+        public void backwardLearn(MatrixD entry, MatrixD nextGradient, double learnRate)
+            => backwardLearn(entry.toMultiMatrix(this.inDims),
+                             nextGradient.toMultiMatrix(this.outDims),
                              learnRate);
 
-        public void backwardLearn(MultiMatrix[] inputs, MultiMatrix[] gradients, double learnRate)
-            => inputs.actionWith(gradients, (i, g) => backwardLearn(i, g, learnRate));
+        public void backwardLearn(MultiMatrix[] entries, MultiMatrix[] nextGradients, double learnRate)
+            => entries.forEachWith(nextGradients, (i, g) => backwardLearn(i, g, learnRate));
 
-        public void backwardLearn(MultiMatrix input, MultiMatrix gradient, double learnRate)
-        {
-            foreach (var kernel in this.kernels)
-                kernel.backwardLearn(input, gradient, learnRate);
-        }
+        public void backwardLearn(MultiMatrix entry, MultiMatrix nextGradient, double learnRate)
+            => kernels.forEachWith(nextGradient.split(), (k,g) => k.backwardLearn(entry,g,learnRate));
     }
 }

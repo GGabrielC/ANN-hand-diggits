@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CloneExtensions;
 using ExtensionMethods;
+using Global;
 using Layers;
 using MathNet.Numerics.LinearAlgebra;
 using MNIST.IO;
@@ -15,7 +16,6 @@ namespace MAIN
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             String labelsPath = "C:/Users/Gabriel/source/repos/ConsoleApp1/ANN/MNIST/MNIST Input Files/" +
@@ -38,7 +38,5 @@ namespace MAIN
             foreach (var c in m.AllCoords(new int[] {2,2,2}))
                 c.print();
         }
-        
-
     }
 }
