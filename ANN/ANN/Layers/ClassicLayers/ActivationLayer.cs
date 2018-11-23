@@ -21,26 +21,29 @@ namespace Layers
 
         private FuncDD[] activations = null;
         private FuncDD[] derivateActivations = null;
-        
+
         public ActivationLayer(int inputSize)
-            => setActivationFunctions(inputSize);
-        
+            => set(inputSize, Enumerable.Repeat<FuncDD>(Functions.ReLU, inputSize).ToArray());
+
+        public ActivationLayer(int inputSize, FuncDD[] activations)
+            => set(inputSize, activations);
+
+        public ActivationLayer(int inputSize, FuncDD activation)
+            => set(inputSize, Enumerable.Repeat<FuncDD>(activation, inputSize).ToArray());
+
         public MatrixD forward(MatrixD inputs)
             => inputs.mapLines(this.Activations);
 
         public MatrixD backward(MatrixD inputs, MatrixD gradient)
             => inputs.mapLines(derivateActivations).scalarMultiply(gradient);
-
+        
         public void backwardLearn(MatrixD inputs, MatrixD gradient, double learnRate)
         {}
 
-        private void setActivationFunctions(int inputSize)
-        { 
-            this.activations = Enumerable.Repeat<FuncDD>(Functions.ReLU, inputSize).ToArray();
-            setDerivateActivationFunctions();
+        private void set(int inputSize, FuncDD[] activations)
+        {
+            this.activations = activations;
+            this.derivateActivations = Functions.getDerivates(Activations);
         }
-
-        private void setDerivateActivationFunctions()
-            => this.derivateActivations = Functions.getDerivates(Activations);
     }
 }

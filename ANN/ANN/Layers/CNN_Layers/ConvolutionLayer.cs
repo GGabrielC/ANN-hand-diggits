@@ -12,7 +12,7 @@ using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
 namespace Layers
 {
-    public class ConvolutionLayer : Layer
+    public class ConvolutionLayer : Layer, ConvNetLayer
     {
         public int InSize => inSize;
         public int OutSize => outSize;

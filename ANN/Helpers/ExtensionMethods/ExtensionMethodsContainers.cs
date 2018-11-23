@@ -16,5 +16,8 @@ namespace ExtensionMethods
                 copy.AddLast(el.GetClone());
             return copy;
         }
+
+        public static IEnumerable<Tm> map<T,Tm>(this IEnumerable<T> elems, Func<T, Tm> func)
+          => elems.Select( func );
     }
 }

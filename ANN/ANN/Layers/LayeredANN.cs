@@ -10,11 +10,11 @@ namespace ANN
 {
     public interface LayeredANN
     {
-        MatrixD feedForward(MatrixD inputs);
-
+        int InSize { get; }
+        int OutSize { get; }
         int LayersCount { get; }
         IEnumerable<Layer> Layers { get; }
-        void addLayer(Layer layer);
-        void setLayers(Layer[] layers);
+        void set(IEnumerable<Layer> layers);
+        MatrixD feedForward(MatrixD inputs);
     }
 }

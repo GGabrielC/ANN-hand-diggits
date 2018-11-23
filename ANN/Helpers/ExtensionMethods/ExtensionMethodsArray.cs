@@ -28,9 +28,6 @@ namespace ExtensionMethods
             for (int i = 0; i < arr.Length; i++)
                 arr[i] = func(arr[i]);
         }
-
-        //public static IEnumerable<Tm> map<T,Tm>(this IEnumerable<T> elems, Func<T, Tm> func)
-          //  => elems.Select( func );
         
         public static Tm[] map<Tm, T>(this T[] arr, Func<T, Tm> func)
         {
@@ -40,11 +37,13 @@ namespace ExtensionMethods
             return result;
         }
         
-        public static Tm[] mapWith<Tm, T,T2>(this T[] arr, T2[] arr2, Func<T, T2, Tm> func)
+        public static Tm[] mapWith<Tm, T,T2>(this T[] arr1, T2[] arr2, Func<T, T2, Tm> func)
         {
-            Tm[] result = new Tm[arr.Length];
-            for (int i = 0; i < arr.Length; i++)
-                result[i] = func(arr[i],arr2[i]);
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
+            Tm[] result = new Tm[arr1.Length];
+            for (int i = 0; i < arr1.Length; i++)
+                result[i] = func(arr1[i],arr2[i]);
             return result;
         }
 
@@ -56,6 +55,8 @@ namespace ExtensionMethods
 
         public static void forEachWith<T,T2>(this T[] arr1, T2[] arr2, Action<T, T2> f)
         {
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
             for (int i = 0; i < arr1.Length; i++)
                 f(arr1[i], arr2[i]);
         }
@@ -85,19 +86,25 @@ namespace ExtensionMethods
 
         public static void changeWith<T>(this T[] arr1, T[] arr2, Func<T,T,T> f)
         {
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
             for (int i = 0; i < arr1.Length; i++)
                 arr1[i] = f(arr1[i], arr2[i]);
         }
 
         public static void addIn(this int[] arr1, int[] arr2)
         {
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
             for (int i = 0; i < arr2.Length; i++)
                 arr1[i] += arr2[i];
         }
 
         public static int[] add(this int[] arr1, int[] arr2)
         {
-            if(arr1.Length < arr2.Length)
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
+            if (arr1.Length < arr2.Length)
             {
                 var aux = arr1;
                 arr1 = arr2;
@@ -110,12 +117,16 @@ namespace ExtensionMethods
 
         public static void addIn(this double[] arr1, double[] arr2)
         {
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
             for (int i = 0; i < arr2.Length; i++)
                 arr1[i] += arr2[i];
         }
 
         public static double[] add(this double[] arr1, double[] arr2)
         {
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
             if (arr1.Length < arr2.Length)
             {
                 var aux = arr1;
@@ -152,12 +163,16 @@ namespace ExtensionMethods
 
         public static void multiplyIn(this double[] arr1, double[] arr2)
         {
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
             for (int i = 0; i < arr2.Length; i++)
                 arr1[i] *= arr2[i];
         }
 
         public static double[] scalarMultiply(this double[] arr1, double[] arr2)
         {
+            if (arr1.Length != arr2.Length)
+                throw new Exception("Containers must have the same length");
             var arr = arr1.ShallowCopy();
             arr.multiplyIn(arr2);
             return arr;
@@ -234,6 +249,40 @@ namespace ExtensionMethods
             for (int i = 0; i < arr.Length; i++)
                 Console.Write(arr[i].ToString() + ",\n");
             Console.WriteLine("]");
+        }
+
+        public static double[] to1Dimension(this double[,] a)
+        {
+            var arr = new double[a.Length];
+            for (int i = 0; i < a.GetLength(0); i++)
+                for (int j = 0; j < a.GetLength(j); j++)
+                    arr[i*a.GetLength(0)+j] = a[i,j];
+            return arr;
+        }
+
+        public static int[] dimensions(this double[,] a)
+        {
+            var dims = new int[a.Rank];
+            for (int i = 0; i < a.Rank; i++)
+                dims[i] = a.GetLength(i);
+            return dims;
+        }
+
+        public static int[] dimensions(this byte[,] a)
+        {
+            var dims = new int[a.Rank];
+            for (int i = 0; i < a.Rank; i++)
+                dims[i] = a.GetLength(i);
+            return dims;
+        }
+        
+        public static double[] to1DimensionDoubles(this byte[,] a)
+        {
+            var arr = new double[a.Length];
+            for (int i = 0; i < a.GetLength(0); i++)
+                for (int j = 0; j < a.GetLength(j); j++)
+                    arr[i * a.GetLength(0) + j] = a[i, j];
+            return arr;
         }
     }
 }

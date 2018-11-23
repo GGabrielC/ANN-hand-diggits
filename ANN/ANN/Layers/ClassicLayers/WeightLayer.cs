@@ -38,7 +38,7 @@ namespace Layers
         }
         
         public void backwardLearn(MatrixD inputs, MatrixD gradients, double learnRate)
-            => this.weights -= gradientWeights(inputs, gradients).scalarMultiply(learnRate); 
+            => this.weights += gradientWeights(inputs, gradients).scalarMultiply(learnRate); 
 
         public MatrixD gradientWeights(MatrixD inputs, MatrixD gradients)
         {
@@ -51,7 +51,7 @@ namespace Layers
         }
 
         private void setWeights(int inputSize, int outputSize)
-            => this.weights = MatrixD.Build.Random(inputSize, outputSize);
+            => this.weights = MatrixD.Build.Random(inputSize, outputSize, -1, 1);
         
     }
 }

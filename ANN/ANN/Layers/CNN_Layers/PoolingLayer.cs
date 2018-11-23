@@ -11,7 +11,7 @@ using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
 namespace Layers
 {
-    public class PoolingLayer : Layer
+    public class PoolingLayer : Layer, ConvNetLayer
     {
         public int InSize => inSize;
         public int OutSize => outSize;
@@ -20,7 +20,18 @@ namespace Layers
             get => pooler;
             private set
             {
-                pooler = value;
+                if (value.Dimensions.Length != inDims.Length)
+                {
+                    var newDims = inDims.ShallowCopy();
+                    for (int i = 0, j = 0; i < newDims.Length; i++)
+                        if (newDims[i] != 1)
+                            newDims[i] = value.Dimensions[j++];
+                    pooler = new Pooler(newDims);
+                }
+                else
+                {
+                    pooler = value;
+                }
                 OutDims = pooler.getOutputDims(inDims);
             }
         }

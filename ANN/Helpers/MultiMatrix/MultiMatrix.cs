@@ -19,12 +19,7 @@ namespace Utils
             get => this.dimensions.ShallowCopy();
             set
             {
-                if (value.Length == 0)
-                    throw new Exception("Cannot Create 0-dim matrix!");
-                if (!value.All(x => x > 0))
-                    throw new Exception("You cannot have less than 1 element in a dimension!");
-                if (Capacity != value.product())
-                    throw new Exception("Dimensions can not fit the data size!");
+                validateDimensions(value);
                 this.dimensions = value;
                 setCapacityCumulation();
             }
@@ -53,6 +48,15 @@ namespace Utils
 
         public MultiMatrix(MultiMatrix[] multiMatrices)
             => use(getMergedData(multiMatrices), getMergedDimensions(multiMatrices));
+
+        public MultiMatrix(double[,] a)
+            => set(a.to1Dimension(), a.dimensions());
+
+        public MultiMatrix(byte[,] a)
+            => set(a.to1DimensionDoubles(), a.dimensions());
+
+        public MultiMatrix(byte[] a)
+            => set(a.map(x=>(double)x), new int[] {1});
 
         public MultiMatrix copy()
             => new MultiMatrix(this);
@@ -229,6 +233,16 @@ namespace Utils
             for (int i = 0; i < multiMatrices.Length; i++)
                 multiMatrices[i].Data.CopyTo(data, i * multiMatrices[0].Capacity);
             return data;
+        }
+
+        private void validateDimensions(int[] dimensions)
+        {
+            if (dimensions.Length == 0)
+                throw new Exception("Cannot Create 0-dim matrix!");
+            if (!dimensions.All(x => x > 0))
+                throw new Exception("You cannot have less than 1 element in a dimension!");
+            if (Capacity != dimensions.product())
+                throw new Exception("Dimensions can not fit the data size!");
         }
     }
 }

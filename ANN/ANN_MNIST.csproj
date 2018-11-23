@@ -108,6 +108,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANN\Layers\CNN_Layers\ConvNetLayer.cs" />
+    <Compile Include="MNIST_solver\NetworkBuilder.cs" />
     <Compile Include="Helpers\ExtensionMethods\ExtensionMethodsArray.cs" />
     <Compile Include="Helpers\ExtensionMethods\ExtensionMethodsContainers.cs" />
     <Compile Include="Helpers\ExtensionMethods\ExtensionMethodsMatrixD.cs" />
@@ -116,7 +118,7 @@
     <Compile Include="ANN\Layers\ClassicLayers\Layer.cs" />
     <Compile Include="Helpers\MultiMatrix\MultiMatrixBuilder.cs" />
     <Compile Include="ANN\Layers\LayeredANN.cs" />
-    <Compile Include="ANN\Layers\Network.cs" />
+    <Compile Include="ANN\Network.cs" />
     <Compile Include="ANN\Layers\ClassicLayers\BiasLayer.cs" />
     <Compile Include="ANN\Layers\ClassicLayers\WeightLayer.cs" />
     <Compile Include="ANN\Layers\CNN_Layers\ConvolutionLayer.cs" />
@@ -132,7 +134,6 @@
     <Compile Include="ANN\TrainAlgorithm\Trainer.cs" />
     <Compile Include="Helpers\Global\ExtensionsRandom.cs" />
     <Compile Include="Helpers\Global\GlobalRandom.cs" />
-    <Compile Include="MNIST_solver\ANN_MNIST.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -19,26 +19,27 @@ namespace UT_Layers
         public void forward()
         {
             var inputs = MatrixD.Build.DenseOfArray(
-                new double[,] { { -100, -1, 0, 1, 100 }, { -500, -0.1, 0, 0.1, 500 } });
+                new double[,] { { -100, -1, 0, 1, 100, 3 }, { -500, -0.1, 0, 0.1, 500, 3 } });
 
             var expectedOutputs = MatrixD.Build.DenseOfArray(
-                new double[,] { { 0, 0, 0, 1, 100 }, { 0, 0, 0, 0.1, 500 } });
+                new double[,] { { 0, 0, 0, 1, 100, 3 }, { 0, 0, 0, 0.1, 500, 3 } });
 
-            var layer = new NormalizationLayer(5);
+            var layer = new NormalizationLayer(new int[] {6});
             Assert.IsTrue(layer.forward(inputs).EEquals(expectedOutputs));
         }
 
         [TestMethod]
         public void backward()
         {
-            int count_examples = 2;
-            int layerInSize = 5;
-            var layer = new NormalizationLayer(layerInSize);
+            var count_examples = 2;
+            var layerInDims = new int[]{6};
+            var layerInSize = layerInDims.product();
+            var layer = new NormalizationLayer(layerInDims);
             var inputs = MatrixD.Build.DenseOfArray(
-                new double[,] { { -100, -1, 0, 1, 100 }, { -500, -0.1, 0, 0.1, 500 } });
+                new double[,] { { -100, -1, 0, 1, 100, 3 }, { -500, -0.1, 0, 0.1, 500, 3 } });
 
             var nextGradients = MatrixD.Build.DenseOfArray(
-                new double[,] { { 0, 0, 0, 1, 100 }, { 0, 0, 0, 0.1, 500 } });
+                new double[,] { { 0, 0, 0, 1, 100,3  }, { 0, 0, 0, 0.1, 500, 3 } });
 
             var expectedGradients = MatrixD.Build.repeat(count_examples, layerInSize, 0);
             FuncDD df = layer.DerivateActivationFunc;

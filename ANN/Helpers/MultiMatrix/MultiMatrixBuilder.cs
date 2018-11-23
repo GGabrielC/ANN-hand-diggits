@@ -20,6 +20,9 @@ namespace Utils
         public MultiMatrix random(int[] sizes)
             => this.useData(GlobalRandom.NextDoubleArr(sizes.product()), sizes);
 
+        public MultiMatrix random(int[] sizes, double minVal, double maxVal)
+            => this.useData(GlobalRandom.NextDoubleArr(sizes.product(), minVal, maxVal), sizes);
+
         public MultiMatrix repeat(int[] sizes, double value)
             => this.useData(ArrayBuilder.repeat(value, sizes.product()), sizes);
     }

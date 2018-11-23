@@ -22,7 +22,7 @@ namespace ExtensionMethods
             return MatrixD.Build.DenseOfArray(matrix);
         }
 
-        public static MatrixD random(this MatrixBuilder<double> mb, int rows, int cols)
+        public static MatrixD Random(this MatrixBuilder<double> mb, int rows, int cols)
         {
             var matrix = new double[rows, cols];
             for (var i = 0; i < rows; i++)
@@ -31,7 +31,7 @@ namespace ExtensionMethods
             return MatrixD.Build.DenseOfArray(matrix);
         }
 
-        public static MatrixD random(this MatrixBuilder<double> mb, int rows, int cols, double minVal, double maxVal)
+        public static MatrixD Random(this MatrixBuilder<double> mb, int rows, int cols, double minVal, double maxVal)
         {
             var matrix = new double[rows, cols];
             for (var i = 0; i < rows; i++)
@@ -107,6 +107,25 @@ namespace ExtensionMethods
                 Console.WriteLine("]");
             }
             Console.WriteLine("]");
+        }
+
+        public static MatrixD randomLines(this MatrixD m, int countLines)
+        {
+            var l = MatrixD.Build.repeat(countLines, m.ColumnCount, 0);
+            var rLines = GlobalRandom.NextIntArr(countLines,0,m.RowCount-1);
+            for (int i = 0; i < l.RowCount; i++)
+                for (int j = 0; j < l.ColumnCount; j++)
+                    l[i, j] = m[rLines[i], j];
+            return l;
+        }
+
+        public static MatrixD lines(this MatrixD m, int[] lines)
+        {
+            var l = MatrixD.Build.repeat(lines.Length, m.ColumnCount, 0);
+            for (int i = 0; i < l.RowCount; i++)
+                for (int j = 0; j < l.ColumnCount; j++)
+                    l[i, j] = m[lines[i], j];
+            return l;
         }
 
         public static MultiMatrix[] toMultiMatrix(this MatrixD data, int[] entryDimensions)

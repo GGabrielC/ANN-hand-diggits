@@ -23,13 +23,13 @@ namespace Sliders
 
         public Kernel(int[] dimensions)
         {
-            this.weights = MultiMatrix.Build.random(dimensions);
+            this.weights = MultiMatrix.Build.random(dimensions,-1,1);
             this.stride = ArrayBuilder.repeat(1, this.DimensionCount);
         }
 
         public Kernel(int[] dimensions, int[] stride)
         {
-            this.weights = MultiMatrix.Build.random(dimensions);
+            this.weights = MultiMatrix.Build.random(dimensions,-1,1);
             this.stride = stride.ShallowCopy();
         }
 
@@ -74,7 +74,7 @@ namespace Sliders
         public override void backwardLearn(MultiMatrix inData, MultiMatrix gradient, double learnRate)
         {
             var gradientW = getGradientWeights(inData, gradient);
-            this.weights.Data.changeWith(gradientW.Data, (w, g) => w-learnRate*g);
+            this.weights.Data.changeWith(gradientW.Data, (w, g) => w+learnRate*g);
         }
 
         public override MultiMatrix getGradientInput(MultiMatrix inData, MultiMatrix gradient)

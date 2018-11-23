@@ -32,14 +32,14 @@ namespace ANN
         { }
         
         public MatrixD getDerivateToInput(MatrixD inputs)
-            => this.expectedInput - inputs;
+            => 2*(this.expectedInput - inputs);
 
         private static MatrixD squaredEuclidianDistance(MatrixD layerInput, MatrixD expectedInput)
         {
             var errorMatrix = expectedInput - layerInput;
             var squaredErrorMatrix = errorMatrix.PointwisePower(2);
             var cost = squaredErrorMatrix.RowSums().Divide(2);
-            var result = MatrixD.Build.DenseOfRowVectors(cost); // to check
+            var result = MatrixD.Build.DenseOfColumnVectors(cost); // to check
             return result;
         }
     }

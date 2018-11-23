@@ -21,7 +21,7 @@ namespace UT_Layers
         {
             var countExamples = 3;
             var inSize = 5;
-            var input = MatrixD.Build.random(countExamples, inSize);
+            var input = MatrixD.Build.Random(countExamples, inSize);
 
             var layer = new BiasLayer(inSize);
             var expectedOutputs = MatrixD.Build.repeat(countExamples, inSize, 0);
@@ -39,9 +39,9 @@ namespace UT_Layers
             var countExamples = 3;
             inSize = outSize = 5;
 
-            var input = MatrixD.Build.random(countExamples, inSize);
+            var input = MatrixD.Build.Random(countExamples, inSize);
             var layer = new BiasLayer(inSize);
-            var nextGradients = MatrixD.Build.random(countExamples, outSize);
+            var nextGradients = MatrixD.Build.Random(countExamples, outSize);
             Assert.IsTrue(layer.backward(input, nextGradients).EEquals(nextGradients));
         }
 
@@ -53,9 +53,9 @@ namespace UT_Layers
             var countExamples = 3;
             inSize = outSize = 5;
 
-            var input = MatrixD.Build.random(countExamples, inSize);
+            var input = MatrixD.Build.Random(countExamples, inSize);
             var layer = new BiasLayer(inSize);
-            var nextGradients = MatrixD.Build.random(countExamples, outSize);
+            var nextGradients = MatrixD.Build.Random(countExamples, outSize);
 
             var expectedBiases = layer.Biases.ShallowCopy();
             var gradientSums = nextGradients.ColumnSums().AsArray();
