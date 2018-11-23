@@ -33,7 +33,7 @@ namespace Layers
             => gradient;
 
         public void backwardLearn(MatrixD inputs, MatrixD gradient, double learnRate)
-            => biases.changeWith(gradient.ColumnSums().AsArray(), (b, g) => b + learnRate*g);
+            => biases.changeWith(gradient.ColumnSums().AsArray(), (b, g) => b - learnRate*g);
         
         private void initBiases( int inputSize)
             => this.biases = GlobalRandom.NextDoubleArr(inputSize, -1, 1);

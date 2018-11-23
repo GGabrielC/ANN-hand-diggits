@@ -17,6 +17,41 @@ namespace UT_Layers
     [TestClass]
     public class UT_Kernel
     {
+        MultiMatrix input;
+        Kernel kernel;
+        MultiMatrix expectedOutput;
+        MultiMatrix nextGradients;
+        MultiMatrix expectedGradientInput;
+        MultiMatrix expNewWeights;
+        double learnRate = 0.5;
+
+        [TestInitializeAttribute]
+        public void setup()
+        {
+            input = new MultiMatrix(new int[] {2,3,3}, new double[]{
+                1,2,3,
+                4,5,6,
+                7,8,9,
+
+                10,11,12,
+                13,14,15,
+                16,17,18,
+            });
+
+            kernel = new Kernel(new int[] { 2, 2, 2 }, new double[]{
+                3,3,
+                4,4,
+
+                1,1,
+                2,2,
+            });
+            
+            expectedOutput = new MultiMatrix(new int[] { 1, 2, 2 }, new double[]{
+                120, 140,
+                180, 200,
+            });
+        }
+
         [TestMethod]
         public void slideOver()
         {
@@ -39,6 +74,9 @@ namespace UT_Layers
             
             var output = kernel.slideOver(inData);
             Assert.IsTrue(output.EEquals(expectedOutput));
+
+            output = this.kernel.slideOver(this.input);
+            Assert.IsTrue(output.EEquals(this.expectedOutput));
         }
         
         [TestMethod]

@@ -114,17 +114,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANN\Layers\ClassicLayers\ActivationLayer.cs" />
-    <Compile Include="ANN\Layers\ClassicLayers\BiasLayer.cs" />
-    <Compile Include="ANN\Layers\ClassicLayers\WeightLayer.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\ConvolutionLayer.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\NormalizationLayer.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\PoolingLayer.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\Sliders\Kernel.cs" />
-    <Compile Include="ANN\Layers\CNN_Layers\Sliders\Pooler.cs" />
-    <Compile Include="Helpers\ExtensionMethods\ExtensionMethodsArray.cs" />
-    <Compile Include="Helpers\Global\GlobalRandom.cs" />
-    <Compile Include="Helpers\MultiMatrix\MultiMatrix.cs" />
+    <Compile Include="ANN\Layers\ClassicLayers\UT_ActivationLayer.cs" />
+    <Compile Include="ANN\Layers\ClassicLayers\UT_BiasLayer.cs" />
+    <Compile Include="ANN\Layers\ClassicLayers\UT_WeightLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\UT_ConvolutionLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\UT_NormalizationLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\UT_PoolingLayer.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Sliders\UT_Kernel.cs" />
+    <Compile Include="ANN\Layers\CNN_Layers\Sliders\UT_Pooler.cs" />
+    <Compile Include="Helpers\ExtensionMethods\UT_ExtensionMethodsArray.cs" />
+    <Compile Include="Helpers\Global\UT_GlobalRandom.cs" />
+    <Compile Include="Helpers\MultiMatrix\UT_MultiMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

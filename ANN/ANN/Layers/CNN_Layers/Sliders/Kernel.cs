@@ -74,7 +74,7 @@ namespace Sliders
         public override void backwardLearn(MultiMatrix inData, MultiMatrix gradient, double learnRate)
         {
             var gradientW = getGradientWeights(inData, gradient);
-            this.weights.Data.changeWith(gradientW.Data, (w, g) => w+learnRate*g);
+            this.weights.Data.changeWith(gradientW.Data, (w, g) => w-learnRate*g);
         }
 
         public override MultiMatrix getGradientInput(MultiMatrix inData, MultiMatrix gradient)

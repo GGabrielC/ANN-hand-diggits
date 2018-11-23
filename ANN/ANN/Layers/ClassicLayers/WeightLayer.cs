@@ -38,7 +38,7 @@ namespace Layers
         }
         
         public void backwardLearn(MatrixD inputs, MatrixD gradients, double learnRate)
-            => this.weights += gradientWeights(inputs, gradients).scalarMultiply(learnRate); 
+            => this.weights -= gradientWeights(inputs, gradients).scalarMultiply(learnRate); 
 
         public MatrixD gradientWeights(MatrixD inputs, MatrixD gradients)
         {
