@@ -60,7 +60,7 @@ namespace ExtensionMethods
             for (int i = 0; i < arr1.Length; i++)
                 f(arr1[i], arr2[i]);
         }
-
+        
         /*
         public static T[] map<T>(this T[] arr, Func<T, T> func)
         {
@@ -248,6 +248,18 @@ namespace ExtensionMethods
             Console.Write("[\n");
             for (int i = 0; i < arr.Length; i++)
                 Console.Write(arr[i].ToString() + ",\n");
+            Console.WriteLine("]");
+        }
+
+        public static void printL<T>(this T[,] arr)
+        {
+            Console.Write("[\n");
+            for (int i = 0; i < arr.GetLength(0); i++)
+            {
+                for (int j = 0; j < arr.GetLength(1); j++)
+                    Console.Write(arr[i,j].ToString() + ", ");
+                Console.WriteLine();
+            }
             Console.WriteLine("]");
         }
 

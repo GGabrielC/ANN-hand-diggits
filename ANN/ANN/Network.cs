@@ -8,6 +8,7 @@ using Layers;
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 using MathNet.Numerics.LinearAlgebra;
 using ExtensionMethods;
+using TrainAlgorithm;
 
 namespace ANN
 {
@@ -37,7 +38,7 @@ namespace ANN
             => train(imagesToMatrixD(annInputs), labelsToMatrixD(annExpectedOutputs));
 
         public void train(MatrixD annInputs, MatrixD annExpectedOutputs)
-            => new Backprop(this, annExpectedOutputs).train(annInputs);
+            => new Backprop(this).train(annInputs, annExpectedOutputs);
         
         public void set(IEnumerable<Layer> layers)
         {

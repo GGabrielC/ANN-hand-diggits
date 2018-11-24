@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Layers;
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
-namespace ANN
+namespace TrainAlgorithm
 {
     public interface Trainer
     {
-        void train(MatrixD annInputs);
+        void train(MatrixD annInputs, MatrixD annExpectedOutputs);
     }
 }

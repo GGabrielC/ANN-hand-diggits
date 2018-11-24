@@ -20,7 +20,7 @@ namespace Utils
             set
             {
                 validateDimensions(value);
-                this.dimensions = value;
+                this.dimensions = value.ShallowCopy();
                 setCapacityCumulation();
             }
         }

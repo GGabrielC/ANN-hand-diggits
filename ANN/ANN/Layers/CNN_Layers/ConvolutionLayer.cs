@@ -26,20 +26,14 @@ namespace Layers
             {
                 var kernelDims = value[0].Dimensions;
                 if(value.Count() == 1)
-                {
                     kernels = value.map(k=> new Kernel(k));
-                    OutDims = value[0].getOutputDims(inDims);
-                }
                 else
                 {
                     if (!value.All(x => x.Dimensions.EEquals(kernelDims)))
                         throw new Exception("All kernels must have same dimensions!");
                     kernels = value.map(k => new Kernel(k));
-                    var outDims = new int[1+KernelDimCount];
-                    outDims[0] = kernels.Count();
-                    kernels[0].getOutputDims(inDims).CopyTo(outDims,1);
-                    OutDims = outDims;
                 }
+                OutDims = getOutputDims(inDims);
             }
         }
 
@@ -92,7 +86,7 @@ namespace Layers
 
         public MultiMatrix[] forward(MultiMatrix[] entries)
             => entries.map( mm => forward(mm) );
-
+        
         public MultiMatrix forward(MultiMatrix entry)
             => new MultiMatrix(kernels.map(k=>k.slideOver(entry)));
 
@@ -122,5 +116,15 @@ namespace Layers
 
         public void backwardLearn(MultiMatrix entry, MultiMatrix nextGradient, double learnRate)
             => kernels.forEachWith(nextGradient.split(), (k,g) => k.backwardLearn(entry,g,learnRate));
+
+        public int[] getOutputDims(int[] inDims)
+        {
+            if (KernelDimCount == 1)
+                return kernels[0].getOutputDims(inDims);
+            var outDims = new int[1 + KernelDimCount];
+            outDims[0] = kernels.Count();
+            kernels[0].getOutputDims(inDims).CopyTo(outDims, 1);
+            return outDims;
+        }
     }
 }

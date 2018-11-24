@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
-namespace ANN
+namespace TrainAlgorithm
 {
     public class CostLayer : Layer
     {

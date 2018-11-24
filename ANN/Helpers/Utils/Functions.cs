@@ -26,9 +26,9 @@ namespace Utils
             => x < 0 ? 0.01 : 1;
 
         public static double xOverModXplus1(double x)
-            => x / (x + Math.Abs(x));
+            => x / (1 + Math.Abs(x));
         public static double xOverModXplus1Derivate(double x)
-            => Math.Pow(1 / (x + Math.Abs(x)), 2);
+            => Math.Pow(1 / (1 + Math.Abs(x)), 2);
 
         public static double sigmoid(double x)
             => 1 / (Math.Pow(Math.E , -x) + 1);

@@ -1,4 +1,5 @@
-﻿using ExtensionMethods;
+﻿using ANN;
+using ExtensionMethods;
 using Global;
 using Layers;
 using MathNet.Numerics.LinearAlgebra;
@@ -9,82 +10,46 @@ using System.Text;
 using System.Threading.Tasks;
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 
-namespace ANN
+namespace TrainAlgorithm
 {
     public class Backprop : Trainer
     {
         LayeredANN ann;
-        MatrixD annExpectedOutput;
-        MatrixD[] layerInputs;
-        Layer[] layers;
-        
         double learnRate;
         LinkedList<double> costHistory;
         int maxSizeCostHistory;
-        MatrixD annOutput;
 
-        public Backprop(LayeredANN ann, MatrixD annExpectedOutput)
-            => init(ann, annExpectedOutput);
+        public Backprop(LayeredANN ann)
+            => init(ann);
         
-        public void train(MatrixD annInput)
+        public void train(MatrixD annInputs, MatrixD annExpectedOutputs)
         {
-            var iterations=10;
-            var entries = 20;
-            var randomEntriesIdx = GlobalRandom.NextIntArr(entries, 0, annInput.RowCount - 1);
-            var currentInput = annInput.lines(randomEntriesIdx);
-            var currendExpectedOutput = annExpectedOutput.lines(randomEntriesIdx);
-            var costLayer = new CostLayer(currendExpectedOutput);
-
-            forward(currentInput);
-            updateFromNewCost(costLayer.forward(annOutput));
-            for(var iteration = 1; iteration< iterations; iteration++)
+            var iterations = 100;
+            var iter = new Iteration(ann.Layers.ToArray() , annInputs, annExpectedOutputs);
+            
+            for (var iteration = 1; iteration< iterations; iteration++)
             {
-                checkPerformace(annOutput, currendExpectedOutput);
                 Console.WriteLine("\nIteration: {0}", iteration);
+                iter.next(learnRate);
+                updateFromNewCost(iter.cost);
+                checkPerformace(iter.currentAnnOutput, iter.currentExpectedOutput);
 
-                randomEntriesIdx = GlobalRandom.NextIntArr(entries, 0, annInput.RowCount - 1);
-                currentInput = annInput.lines(randomEntriesIdx);
-                currendExpectedOutput = annExpectedOutput.lines(randomEntriesIdx);
-                costLayer = new CostLayer(currendExpectedOutput);
-
-                backwardTrain(costLayer);
-                forward(annInput.randomLines(entries));
-                var annOut = annOutput.ToRowArrays();
-                var outSum = annOutput.RowSums();
-                updateFromNewCost(costLayer.forward(annOutput));
+                /* * /
+                var mO = iter.currentAnnOutput.ToRowArrays();
+                var mEO = iter.currentExpectedOutput.ToRowArrays();
+                var mOidx = iter.currentAnnOutput.maxIdxEachRow();
+                var mEOidx = iter.currentExpectedOutput.maxIdxEachRow();
+                //*/
             }
             //Console.WriteLine("Setting trained layers!");
-            ann.set(this.layers);
+            ann.set(iter.layers);
         }
-
-        void forward(MatrixD inputs)
-        {
-            layerInputs[0] = inputs;
-            for (int i=1; i<this.layers.Length; i++)
-                layerInputs[i] = this.layers[i-1].forward(layerInputs[i-1]);
-            this.annOutput = this.layers.Last().forward(layerInputs.Last());
-        }
-
-        void backwardTrain(CostLayer costLayer)
-        {
-            var gradients = costLayer.backward(annOutput);
-            for (int i = layers.Length-1; i > 0; i--)
-            {
-                layers[i].backwardLearn(layerInputs[i], gradients, learnRate);
-                gradients = layers[i].backward(layerInputs[i], gradients);
-            }
-            layers[0].backwardLearn(layerInputs[0], gradients, learnRate);
-        }
-
-        private void init(LayeredANN ann, MatrixD annExpectedOutput)
+        
+        private void init(LayeredANN ann)
         {
             this.ann = ann;
-            this.annExpectedOutput = annExpectedOutput;
-            this.layers = ann.Layers.ToArray();
-            this.layerInputs = new MatrixD[ann.LayersCount];
-
-            this.learnRate = 0.05;
-            this.costHistory = new LinkedList<double>(); ;
+            this.learnRate = 0.01;
+            this.costHistory = new LinkedList<double>();
             this.maxSizeCostHistory = 10000;
         }
 
@@ -112,21 +77,18 @@ namespace ANN
 
         private void checkPerformace(MatrixD annOutput, MatrixD expectedOutput)
         {
-            var countSuccess = 0;
-            for(var i=0; i<annOutput.RowCount; i++)
-            {
-                var maxIdx = 0;
-                var max = annOutput[i,0];
-                for(var j=0; j<annOutput.ColumnCount; j++)
-                    if(max < annOutput[i,j])
-                    {
-                        max = annOutput[i, j];
-                        maxIdx = j;
-                    }
-                if (expectedOutput[i, maxIdx].EEquals(1))
-                    countSuccess++;
-            }
+            var maxOutsIdx = annOutput.maxIdxEachRow();
+            var maxEOutsIdx = expectedOutput.maxIdxEachRow();
+            var outPairs = maxOutsIdx.Zip(maxEOutsIdx, (i1, i2) => new int[] {i1,i2 });
+            var countSuccess = outPairs.Count(x=>x[0]==x[1]);
+            
+            var confusionMatrix = new int[expectedOutput.ColumnCount, expectedOutput.ColumnCount];
+            foreach (var pair in outPairs)
+                confusionMatrix[pair[0], pair[1]] += 1;
+
             Console.WriteLine("Performance: {0}/{1}", countSuccess, expectedOutput.RowCount);
+            Console.WriteLine("Confusion Matrix:");
+            confusionMatrix.printL();
         }
     }
 }

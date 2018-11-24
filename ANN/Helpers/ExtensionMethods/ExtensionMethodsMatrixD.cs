@@ -128,6 +128,24 @@ namespace ExtensionMethods
             return l;
         }
 
+        public static int[] maxIdxEachRow(this MatrixD m)
+        {
+            int[] ms = new int[m.RowCount];
+            for (int i = 0; i < m.RowCount; i++)
+            {
+                var maxIdx = 0;
+                var max = m[i, 0];
+                for (var j = 0; j < m.ColumnCount; j++)
+                    if (max < m[i, j])
+                    {
+                        max = m[i, j];
+                        maxIdx = j;
+                    }
+                ms[i] = maxIdx;
+            }
+            return ms;
+        }
+
         public static MultiMatrix[] toMultiMatrix(this MatrixD data, int[] entryDimensions)
         {
             int countEntries = data.RowCount;

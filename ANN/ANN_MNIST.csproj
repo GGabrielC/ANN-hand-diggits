@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ANN\Layers\CNN_Layers\ConvNetLayer.cs" />
+    <Compile Include="ANN\TrainAlgorithm\Iteration.cs" />
     <Compile Include="MNIST_solver\NetworkBuilder.cs" />
     <Compile Include="Helpers\ExtensionMethods\ExtensionMethodsArray.cs" />
     <Compile Include="Helpers\ExtensionMethods\ExtensionMethodsContainers.cs" />
