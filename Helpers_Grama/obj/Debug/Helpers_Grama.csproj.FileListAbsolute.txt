@@ -1,0 +1,9 @@
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\bin\Debug\Helpers_Grama.dll
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\bin\Debug\Helpers_Grama.pdb
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\bin\Debug\MathNet.Numerics.dll
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\bin\Debug\MathNet.Numerics.xml
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\obj\Debug\Helpers_Grama.csprojAssemblyReference.cache
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\obj\Debug\Helpers_Grama.csproj.CoreCompileInputs.cache
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\obj\Debug\Helpers_Grama.csproj.CopyComplete
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\obj\Debug\Helpers_Grama.dll
+C:\Users\Gabriel\source\repos\ANN_MNIST\Helpers_Grama\obj\Debug\Helpers_Grama.pdb

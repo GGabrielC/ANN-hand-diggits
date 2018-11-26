@@ -1,0 +1,11 @@
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\bin\Debug\MultiMatrix.dll
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\bin\Debug\MultiMatrix.pdb
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\bin\Debug\Helpers_Grama.dll
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\bin\Debug\MathNet.Numerics.dll
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\bin\Debug\Helpers_Grama.pdb
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\bin\Debug\MathNet.Numerics.xml
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\obj\Debug\MultiMatrix.csprojAssemblyReference.cache
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\obj\Debug\MultiMatrix.csproj.CoreCompileInputs.cache
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\obj\Debug\MultiMatrix.csproj.CopyComplete
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\obj\Debug\MultiMatrix.dll
+C:\Users\Gabriel\source\repos\ANN_MNIST\MultiMatrix\obj\Debug\MultiMatrix.pdb

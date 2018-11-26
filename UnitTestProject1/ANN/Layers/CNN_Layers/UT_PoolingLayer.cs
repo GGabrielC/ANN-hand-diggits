@@ -9,8 +9,10 @@ using Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Layers;
 using ExtensionMethods;
-using Global;
+using GlobalRandom_;
 using Sliders;
+using MultiMatrix_;
+using LayerInputExtensions;
 
 namespace UT_Layers
 {

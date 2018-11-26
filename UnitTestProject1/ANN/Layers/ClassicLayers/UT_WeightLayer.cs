@@ -2,10 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MatrixD = MathNet.Numerics.LinearAlgebra.Matrix<System.Double>;
 using FuncDD = System.Func<System.Double, System.Double>;
-using Utils;
 using Layers;
 using ExtensionMethods;
-using Global;
 
 namespace UT_Layers
 {

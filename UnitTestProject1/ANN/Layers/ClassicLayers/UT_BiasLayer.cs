@@ -9,7 +9,7 @@ using Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Layers;
 using ExtensionMethods;
-using Global;
+using GlobalRandom_;
 
 namespace UT_Layers
 {

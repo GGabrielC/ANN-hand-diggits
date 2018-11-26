@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANN_MNIST", "ANN_MNIST\ANN_MNIST.csproj", "{44393832-57CD-43EB-BC59-9B25A0B3F3A8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79} = {66305C21-1AC4-486A-9C97-E0BE651EAE79}
+		{713060ED-B944-456E-9FD8-5FDDA26FC1E4} = {713060ED-B944-456E-9FD8-5FDDA26FC1E4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiMatrix", "MultiMatrix\MultiMatrix.csproj", "{713060ED-B944-456E-9FD8-5FDDA26FC1E4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79} = {66305C21-1AC4-486A-9C97-E0BE651EAE79}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers_Grama", "Helpers_Grama\Helpers_Grama.csproj", "{66305C21-1AC4-486A-9C97-E0BE651EAE79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANN", "ANN\ANN.csproj", "{D0027DC7-789C-4650-93DB-0558B21C274E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79} = {66305C21-1AC4-486A-9C97-E0BE651EAE79}
+		{713060ED-B944-456E-9FD8-5FDDA26FC1E4} = {713060ED-B944-456E-9FD8-5FDDA26FC1E4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{AA2EF782-07D5-4DCA-A5FC-3725F7AF7986}"
+	ProjectSection(ProjectDependencies) = postProject
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79} = {66305C21-1AC4-486A-9C97-E0BE651EAE79}
+		{D0027DC7-789C-4650-93DB-0558B21C274E} = {D0027DC7-789C-4650-93DB-0558B21C274E}
+		{713060ED-B944-456E-9FD8-5FDDA26FC1E4} = {713060ED-B944-456E-9FD8-5FDDA26FC1E4}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44393832-57CD-43EB-BC59-9B25A0B3F3A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44393832-57CD-43EB-BC59-9B25A0B3F3A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44393832-57CD-43EB-BC59-9B25A0B3F3A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44393832-57CD-43EB-BC59-9B25A0B3F3A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{713060ED-B944-456E-9FD8-5FDDA26FC1E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{713060ED-B944-456E-9FD8-5FDDA26FC1E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{713060ED-B944-456E-9FD8-5FDDA26FC1E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{713060ED-B944-456E-9FD8-5FDDA26FC1E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66305C21-1AC4-486A-9C97-E0BE651EAE79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0027DC7-789C-4650-93DB-0558B21C274E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0027DC7-789C-4650-93DB-0558B21C274E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0027DC7-789C-4650-93DB-0558B21C274E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0027DC7-789C-4650-93DB-0558B21C274E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA2EF782-07D5-4DCA-A5FC-3725F7AF7986}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA2EF782-07D5-4DCA-A5FC-3725F7AF7986}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA2EF782-07D5-4DCA-A5FC-3725F7AF7986}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA2EF782-07D5-4DCA-A5FC-3725F7AF7986}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {184516AD-A98C-499D-BED5-5A8086668922}
+	EndGlobalSection
+EndGlobal
