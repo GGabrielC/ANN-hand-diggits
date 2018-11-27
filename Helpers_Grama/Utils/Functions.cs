@@ -42,7 +42,7 @@ namespace Utils
 
         // https://en.wikipedia.org/wiki/File:Gjl-t(x).svg
 
-        protected static readonly Dictionary<FuncDD, FuncDD> derivates = new Dictionary<FuncDD, FuncDD>();
+        static readonly Dictionary<FuncDD, FuncDD> derivates = new Dictionary<FuncDD, FuncDD>();
         static Functions()
         {
             derivates.Add(ReLU, ReluDerivate);

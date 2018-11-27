@@ -114,7 +114,6 @@
     <Compile Include="MAIN\Program.cs" />
     <Compile Include="MNIST_solver\MNISTNetworkBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XORnetBuilder.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
