@@ -28,7 +28,7 @@ namespace MNIST_SOLVER
         public Network build()
         {
             var inDims = new int[] {IMAGE_HEIGHT, IMAGE_WIDTH };
-            var depth = 5;
+            var depth = 8;
 
             layers.AddLast(new ConvolutionLayer(new int[] { 3, 3 }, depth, inDims));
             LastLayerOutDims.print();// d, 26, 26

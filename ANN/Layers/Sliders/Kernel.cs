@@ -72,18 +72,18 @@ namespace Sliders
             return outData;
         }
         
-        public override void backwardLearn(MultiMatrix inData, MultiMatrix gradient, double learnRate)
+        public override void backwardLearn(MultiMatrix inData, MultiMatrix nextGradient, double learnRate)
         {
-            var gradientW = getGradientWeights(inData, gradient);
+            var gradientW = getGradientWeights(inData, nextGradient);
             this.weights.Data.changeWith(gradientW.Data, (w, g) => w-learnRate*g);
         }
 
-        public override MultiMatrix getGradientInput(MultiMatrix inData, MultiMatrix gradient)
+        public override MultiMatrix getGradientInput(MultiMatrix inData, MultiMatrix nextGradient)
         {
             var gradientIn = MultiMatrix.Build.repeat(inData.Dimensions, 0);
-            foreach (var coords in gradient.AllCoords())
+            foreach (var coords in nextGradient.AllCoords())
                 foreach (var offset in Weights.AllCoords())
-                    gradientIn.addAt(coords.add(offset), gradient.at(coords) * Weights.at(offset));
+                    gradientIn.addAt(coords.add(offset), nextGradient.at(coords) * Weights.at(offset));
             return gradientIn;
         }
 
@@ -99,21 +99,21 @@ namespace Sliders
             return sum;
         }
 
-        public MultiMatrix getGradientInputWithRotation(MultiMatrix gradient)
+        public MultiMatrix getGradientInputWithRotation(MultiMatrix nextGradient)
         {
             var correlationMatrix = new Kernel(this);
             correlationMatrix.rotate90();
-            return correlationMatrix.slideOver(gradient.padded(this.Dimensions.add(-1)));
+            return correlationMatrix.slideOver(nextGradient.padded(this.Dimensions.add(-1)));
         }// TODO check ?
         
-        public MultiMatrix getGradientWeights(MultiMatrix inData, MultiMatrix gradient)
+        public MultiMatrix getGradientWeights(MultiMatrix inData, MultiMatrix nextGradient)
         {
             var gradientW = new MultiMatrix(this.Dimensions);
-            foreach (var coord in gradient.AllCoords())
+            foreach (var coord in nextGradient.AllCoords())
                 foreach (var offset in this.weights.AllCoords())
                 {
                     var nearbyCoord = coord.add(offset);
-                    gradientW.addAt(offset, gradient.at(coord) * inData.at(nearbyCoord));
+                    gradientW.addAt(offset, nextGradient.at(coord) * inData.at(nearbyCoord));
                 }
             return gradientW;
         }

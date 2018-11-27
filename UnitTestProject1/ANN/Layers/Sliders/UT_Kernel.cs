@@ -51,6 +51,13 @@ namespace UT_Layers
                 120, 140,
                 180, 200,
             });
+
+            nextGradients = new MultiMatrix(new int[] { 1, 2, 2 }, new double[]{
+                4,2,
+                3,1,
+            });
+
+            //expectedGradientInput = new MultiMatrix(new int[] { 2, 3, 3 }, new double[]{ });
         }
 
         [TestMethod]

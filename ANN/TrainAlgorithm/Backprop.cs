@@ -25,8 +25,7 @@ namespace TrainAlgorithm
         public void train(MatrixD annInputs, MatrixD annExpectedOutputs, int iterations=100, int iterationSize = 50)
         {
             var iter = new Iteration(ann.Layers.ToArray(), annInputs, annExpectedOutputs);
-
-            for (var iteration = 1; iteration < iterations; iteration++)
+            for (var iteration = 0; iteration < iterations; iteration++)
             {
                 Console.WriteLine("\nIteration: {0}", iteration);
                 iter.next(learnRate, iterationSize);
@@ -76,6 +75,7 @@ namespace TrainAlgorithm
 
         private void checkPerformace(MatrixD annOutput, MatrixD expectedOutput)
         {
+            /* */
             var maxOutsIdx = annOutput.maxIdxEachRow();
             var maxEOutsIdx = expectedOutput.maxIdxEachRow();
             var outPairs = maxOutsIdx.Zip(maxEOutsIdx, (i1, i2) => new int[] { i1, i2 });
@@ -88,6 +88,17 @@ namespace TrainAlgorithm
             Console.WriteLine("Performance: {0}/{1}", countSuccess, expectedOutput.RowCount);
             Console.WriteLine("Confusion Matrix:");
             confusionMatrix.printL();
+            //*/
+
+            /* * /
+            var countSuccess = 0;
+            var o = annOutput.ToRowArrays();
+            var eo = expectedOutput.ToRowArrays();
+            for (int i = 0; i < o.Length; i++)
+                if (o[i].EEquals(eo[i]))
+                    countSuccess++;
+            Console.WriteLine("Performance: {0}/{1}", countSuccess, expectedOutput.RowCount);
+            //*/
         }
     }
 }

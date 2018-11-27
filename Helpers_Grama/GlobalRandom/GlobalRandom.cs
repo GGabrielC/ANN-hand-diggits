@@ -26,7 +26,7 @@ namespace GlobalRandom_
 
         public static int[] NextIntArr(int count, int minVal, int maxVal)
             => Instance.NextIntArr(count, minVal, maxVal);
-
+        
         public static double[] NextDoubleArr(int count)
             => Instance.NextDoubleArr(count);
 
