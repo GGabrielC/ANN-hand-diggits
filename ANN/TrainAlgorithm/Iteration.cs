@@ -13,7 +13,8 @@ namespace TrainAlgorithm
     public class Iteration
     {
         public MatrixD[] layerInputs;
-        public MatrixD cost;
+        public MatrixD preCost;
+        public MatrixD postCost;
         public MatrixD currentAnnOutput;
         public MatrixD currentInput;
         public MatrixD currentExpectedOutput;
@@ -32,13 +33,14 @@ namespace TrainAlgorithm
 
         public void next(double learnRate, int countEntries)
         {
+            preCost = postCost = null;
             var randomEntriesIdx = GlobalRandom.NextIntArr(countEntries, 0, annInputs.RowCount - 1);
             this.currentInput = annInputs .lines(randomEntriesIdx);
             this.currentExpectedOutput = annExpectedOutputs.lines(randomEntriesIdx);
 
             var costLayer = new CostLayer(currentExpectedOutput);
             forward(currentInput, costLayer);
-            backwardTrain(costLayer, learnRate);
+            backwardTrain(costLayer, learnRate/countEntries);
             
             /* * /
             var mO = annOutput.ToRowArrays();
@@ -55,7 +57,9 @@ namespace TrainAlgorithm
             for (int i = 1; i < this.layers.Length; i++)
                 layerInputs[i] = this.layers[i - 1].forward(layerInputs[i - 1]);
             this.currentAnnOutput = this.layers.Last().forward(layerInputs.Last());
-            this.cost = costLayer.forward(this.currentAnnOutput);
+            if(preCost==null)
+                preCost = costLayer.forward(this.currentAnnOutput);
+            else postCost = costLayer.forward(this.currentAnnOutput);
             //var m = annOutput.ToRowArrays();
         }
 

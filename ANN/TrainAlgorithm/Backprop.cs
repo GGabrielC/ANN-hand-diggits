@@ -22,14 +22,14 @@ namespace TrainAlgorithm
         public Backprop(LayeredANN ann)
             => init(ann);
 
-        public void train(MatrixD annInputs, MatrixD annExpectedOutputs, int iterations=100, int iterationSize = 50)
+        public void train(MatrixD annInputs, MatrixD annExpectedOutputs, int iterations=100, int batchSize = 50)
         {
             var iter = new Iteration(ann.Layers.ToArray(), annInputs, annExpectedOutputs);
             for (var iteration = 0; iteration < iterations; iteration++)
             {
                 Console.WriteLine("\nIteration: {0}", iteration);
-                iter.next(learnRate, iterationSize);
-                updateFromNewCost(iter.cost);
+                iter.next(learnRate, batchSize);
+                updateFromNewCost(iter.preCost);
                 checkPerformace(iter.currentAnnOutput, iter.currentExpectedOutput);
 
                 /* * /
@@ -46,7 +46,7 @@ namespace TrainAlgorithm
         private void init(LayeredANN ann)
         {
             this.ann = ann;
-            this.learnRate = 0.01;
+            this.learnRate = 0.0001;
             this.costHistory = new LinkedList<double>();
             this.maxSizeCostHistory = 10000;
         }
@@ -56,16 +56,20 @@ namespace TrainAlgorithm
             var cost = newCost.ColumnSums()[0];
             Console.WriteLine("Cost: {0}", cost);
             updateCostHistory(cost);
-            updateRate();
+            if(costHistory.Count()>1)
+                updateRate();
         }
 
         private void updateRate()
         {
-            if (true)
-                learnRate *= 1;
-            else learnRate *= 1;
+            if (lastIterationMadeProgress())
+                learnRate *= 0.5;
+            else learnRate *= 2;
         }
 
+        private bool lastIterationMadeProgress()
+            => costHistory.Last.Value < costHistory.Last.Previous.Value;
+        
         private void updateCostHistory(double cost)
         {
             if (costHistory.Count() == maxSizeCostHistory)
@@ -75,7 +79,7 @@ namespace TrainAlgorithm
 
         private void checkPerformace(MatrixD annOutput, MatrixD expectedOutput)
         {
-            /* */
+            /* * /
             var maxOutsIdx = annOutput.maxIdxEachRow();
             var maxEOutsIdx = expectedOutput.maxIdxEachRow();
             var outPairs = maxOutsIdx.Zip(maxEOutsIdx, (i1, i2) => new int[] { i1, i2 });

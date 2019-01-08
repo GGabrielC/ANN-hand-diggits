@@ -1,4 +1,5 @@
-﻿using ANN;
+﻿using _10x_y;
+using ANN;
 using GlobalRandom_;
 using MNIST_SOLVER;
 using System;
@@ -27,6 +28,7 @@ namespace WindowsFormsApp1
             //*/
 
             //new XORsolver().start();
+            //new Solver10x().start();
         }
     }
 }
